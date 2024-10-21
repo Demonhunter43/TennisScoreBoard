@@ -1,0 +1,17 @@
+{
+  "name": "vladislav/tennis_scoare_board",
+  "authors": [
+    {
+      "name": "Vladislav Kuznetsov",
+      "email": "kuznetsov_vd@inbox.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}
