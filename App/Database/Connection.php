@@ -8,7 +8,17 @@ class Connection
 
     public function __construct()
     {
-        $this->pdoConnection = new \PDO('sqlite: currency_exchange.db'); //TODO MySQL
+        require_once "connectionInfo.php";
+        /**
+         * @var  $hostname ,
+         * @var  $dbname ,
+         * @var  $port ,
+         * @var  $login ,
+         * @var  $password
+         */
+
+        $this->pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;",$login,$password);
+        //$this->pdoConnection = new \PDO('sqlite: tennis.db');
     }
 
     /**
