@@ -1,9 +1,8 @@
 <?php
 
-require_once '../../vendor/autoload.php';
+use src\App\App;
 
-$router = new \src\Public\Router();
-$router->run();
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-
-header("Location: http://localhost:8876/matches");
+$app = new App();
+$app->run();

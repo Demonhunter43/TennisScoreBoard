@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Public;
+namespace src\Routing;
 
 use src\Controllers\MatchScoreController;
 use src\Controllers\NewMatchController;
@@ -38,5 +38,6 @@ class Router
             $controller = new MatchScoreController($this->url);
             $controller->run();
         }
+        header("Location: http://localhost:8876/matches");
     }
 }
