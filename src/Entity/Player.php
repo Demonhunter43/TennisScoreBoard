@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Models;
+namespace src\Entity;
 
 class Player
 {
