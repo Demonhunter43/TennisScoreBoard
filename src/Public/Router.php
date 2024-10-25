@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Public;
+namespace src\Public;
 
-use App\Controllers\MatchScoreController;
-use App\Controllers\NewMatchController;
-use App\Controllers\PlayedMatchesController;
-use App\Controllers\WrongURLController;
+use src\Controllers\MatchScoreController;
+use src\Controllers\NewMatchController;
+use src\Controllers\PlayedMatchesController;
 
 class Router
 {
@@ -25,6 +24,7 @@ class Router
     {
         $firstWord = substr($this->url, 0, 7);
         if ($firstWord == "matches") {
+            var_dump("Это страница матчей");
             $controller = new PlayedMatchesController($this->url);
             $controller->run();
         }
@@ -38,7 +38,5 @@ class Router
             $controller = new MatchScoreController($this->url);
             $controller->run();
         }
-        $controller = new WrongURLController();
-        $controller->run();
     }
 }

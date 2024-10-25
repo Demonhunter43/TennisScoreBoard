@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace src\Controllers;
 
 class NewMatchController
 {

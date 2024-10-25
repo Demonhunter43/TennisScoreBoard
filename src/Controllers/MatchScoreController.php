@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace src\Controllers;
 
-use App\Front\MatchScoreView;
-use App\Http\HttpResponse;
+use src\Front\MatchScoreView;
 
 class MatchScoreController
 {

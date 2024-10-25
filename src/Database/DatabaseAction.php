@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Database;
+namespace src\Database;
 
 
-use App\DTO\MatchDTO;
-use App\DTO\PlayerDTO;
+use src\DTO\MatchDTO;
+use src\DTO\PlayerDTO;
 
 class DatabaseAction
 {

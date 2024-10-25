@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO;
+namespace src\DTO;
 
 class PlayerDTO
 {
