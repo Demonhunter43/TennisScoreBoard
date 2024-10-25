@@ -2,6 +2,5 @@
 
 require_once '../../vendor/autoload.php';
 
-$str = "aszhzzkpzjzbfjcvbjjd";
-
-require "../View/matches.php";
+$router = new \App\Public\Router();
+$router->run();

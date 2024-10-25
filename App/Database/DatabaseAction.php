@@ -4,16 +4,15 @@ namespace App\Database;
 
 
 use App\DTO\MatchDTO;
+use App\DTO\PlayerDTO;
 
 class DatabaseAction
 {
     private Connection $connection;
-    private TransformerDTO $transformerDTO;
 
     public function __construct()
     {
         $this->connection = new Connection();
-        $this->transformerDTO = new TransformerDTO();
     }
 
     public function getAllMatches(): array
@@ -32,11 +31,12 @@ class DatabaseAction
 
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute();
-        return $this->transformerDTO->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
+        return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
     }
 
-    public function addMatch(MatchDTO $matchDTO): void
+    public function addFinishedMatch(MatchDTO $matchDTO): void
     {
+        //TODO to implement this
         $code = $currency->getCode();
         $fullName = $currency->getFullName();
         $sign = $currency->getSign();
@@ -49,5 +49,31 @@ class DatabaseAction
             'fullName' => $fullName,
             'sign' => $sign
         ]);
+    }
+
+    public function makeObjectsArray($data): array
+    {
+        $i = 0;
+        foreach ($data as $objectData) {
+            $array[$i] = $this->makeObject($objectData);
+            $i++;
+        }
+        return $array;
+    }
+
+    public function makeObject(array $dataObject): MatchDTO|PlayerDTO
+    {
+        if (array_key_exists("Name", $dataObject)) {
+            return new PlayerDTO($dataObject["ID"], $dataObject["Name"]);
+        } else {
+            $player1DTO = new PlayerDTO($dataObject["ID"], $dataObject["Player1Name"]);
+            $player2DTO = new PlayerDTO($dataObject["ID"], $dataObject["Player2Name"]);
+            if ($player1DTO->getName() == $dataObject["WinnerName"]) {
+                $winnerDTO = $player1DTO;
+            } else {
+                $winnerDTO = $player2DTO;
+            }
+            return new MatchDTO($dataObject["ID"], $player1DTO, $player2DTO, $winnerDTO);
+        }
     }
 }
