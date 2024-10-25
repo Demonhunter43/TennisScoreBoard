@@ -2,7 +2,7 @@
 
 namespace src\Controllers;
 
-class PlayedMatchesController
+class PlayedMatchesController extends Controller
 {
     public function run(): void
     {

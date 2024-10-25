@@ -4,7 +4,7 @@ namespace src\Controllers;
 
 use src\Front\MatchScoreView;
 
-class MatchScoreController
+class MatchScoreController extends Controller
 {
     public function run(): void
     {

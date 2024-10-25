@@ -2,7 +2,7 @@
 
 namespace src\Controllers;
 
-class NewMatchController
+class NewMatchController extends Controller
 {
     public function run():void
     {

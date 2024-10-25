@@ -11,16 +11,12 @@ class Router
     private string $url;
 
 
-    public function __construct()
+    public function __construct(string $url)
     {
-        if (array_key_exists('REQUEST_URI', $_SERVER)) {
-            $this->url = substr($_SERVER['REQUEST_URI'], 1);
-        } else {
-            $this->url = null;
-        }
+        $this->url = $url;
     }
 
-    public function run(): void
+    public function getController():
     {
         $firstWord = substr($this->url, 0, 7);
         if ($firstWord == "matches") {
