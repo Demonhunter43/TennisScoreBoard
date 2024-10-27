@@ -33,7 +33,7 @@ final class Connection
     /**
      * @return mixed
      */
-    public static function getPdo(): \PDO
+    public function getPdo(): \PDO
     {
         return self::$pdoConnection;
     }

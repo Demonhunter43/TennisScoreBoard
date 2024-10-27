@@ -12,7 +12,7 @@ class DatabaseAction
 
     public function __construct()
     {
-        $this->connection = new Connection();
+        $this->connection = Connection::getInstance();
     }
 
     public function getAllMatches(): array
