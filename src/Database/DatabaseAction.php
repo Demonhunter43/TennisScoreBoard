@@ -15,6 +15,9 @@ class DatabaseAction
         $this->connection = Connection::getInstance();
     }
 
+    /**
+     * @return MatchDTO[]
+     */
     public function getAllMatches(): array
     {
         $sql = "SELECT  matches.ID,

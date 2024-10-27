@@ -2,10 +2,24 @@
 
 namespace src\View;
 
+use JetBrains\PhpStorm\NoReturn;
+use src\DTO\MatchDTO;
+
 class FinishedMatchesView
 {
-    public function render(array $data, int $code): void
-    { ?>
+    /**
+     * @param MatchDTO[] $data
+     * @param int $code
+     * @return void
+     */
+    #[NoReturn] public function render(?array $data, int $code): void
+    {
+        http_response_code($code);
+        if (is_null($data)) {
+            echo "Произошла какая-то ошибка, можно попробовать перезагрузить";
+            exit();
+        }
+        ?>
 
         <!doctype html>
         <html lang="en">
@@ -36,13 +50,13 @@ class FinishedMatchesView
 
                     <?php
                     $matchIndex = 0;
-                    foreach ($data as $match) {
+                    foreach ($data as $matchDto) {
                         $matchIndex++; ?>
                         <tr>
                             <th><?= $matchIndex ?></th>
-                            <th><?= $match["player1"] ?></th>
-                            <th><?= $match["player2"] ?></th>
-                            <th><?= $match["winner"] ?></th>
+                            <th><?= $matchDto->getPlayer1Name() ?></th>
+                            <th><?= $matchDto->getPlayer2Name() ?></th>
+                            <th><?= $matchDto->getWinnerName() ?></th>
                         </tr>;
                     <?php } ?>
 
@@ -55,5 +69,6 @@ class FinishedMatchesView
 
 
         <?php
+        exit();
     }
 }
