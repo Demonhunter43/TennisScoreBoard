@@ -2,11 +2,13 @@
 
 namespace src\Database;
 
-class Connection
+final class Connection
 {
-    private \PDO $pdoConnection;
+    private static ?self $instance = null;
+    private static \PDO $pdoConnection;
 
-    public function __construct()
+
+    private function __construct()
     {
         require_once "connectionInfo.php";
         /**
@@ -16,16 +18,33 @@ class Connection
          * @var  $login ,
          * @var  $password
          */
-
-        $this->pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;",$login,$password);
+        self::$pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;",$login,$password);
         //$this->pdoConnection = new \PDO('sqlite: tennis.db');
+    }
+    public static function getInstance(): self
+    {
+        if (self::$instance === null ){
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     /**
      * @return mixed
      */
-    public function getPdo(): \PDO
+    public static function getPdo(): \PDO
     {
-        return $this->pdoConnection;
+        return self::$pdoConnection;
+    }
+
+    public function __clone(): void
+    {
+        // TODO: Implement __clone() method.
+    }
+
+    public function __wakeup(): void
+    {
+        // TODO: Implement __wakeup() method.
     }
 }
