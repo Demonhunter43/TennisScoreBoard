@@ -17,8 +17,7 @@ class App
             exit();
         }
         $url = $_SERVER['REQUEST_URI'];
-        $router = new Router($url);
-        $controller = $router->getController();
+        $controller = Router::getController($url);
         $controller->run();
     }
 }
