@@ -10,7 +10,7 @@ class App
     {
     }
 
-    public function run(): void
+    public static function run(): void
     {
         if (!array_key_exists('REQUEST_URI', $_SERVER)) {
             header("Location: http://localhost:8876/matches");
