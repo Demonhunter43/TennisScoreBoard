@@ -1,13 +1,28 @@
 services:
   nginx:
+    container_name: TennisScoreBoard_nginx
     image: nginx:latest
     volumes:
       - ./:/var/www/
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     ports:
       - "8876:80"
-    container_name: TennisScoreBoard_nginx
+    depends_on:
+      - php
+      - db
   php:
-    image: php:8.2-fpm
+    container_name: TennisScoreBoard_php
+    build:
+      context: .
+      dockerfile: _docker/Dockerfile
     volumes:
     - ./:/var/www/
+    depends_on:
+      - db
+  db:
+    container_name: TennisScoreBoard_db
+    image: mysql
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
