@@ -4,8 +4,8 @@ namespace src\Http;
 
 readonly class Request
 {
-    public readonly string $method;
-    public readonly string $uri;
+    public string $method;
+    public string $uri;
 
 
     public function __construct()

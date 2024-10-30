@@ -18,12 +18,13 @@ final class Connection
          * @var  $login ,
          * @var  $password
          */
-        self::$pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;",$login,$password);
+        self::$pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;", $login, $password);
         //$this->pdoConnection = new \PDO('sqlite: tennis.db');
     }
+
     public static function getInstance(): self
     {
-        if (is_null(self::$instance)){
+        if (is_null(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -40,11 +41,9 @@ final class Connection
 
     public function __clone(): void
     {
-        // TODO: Implement __clone() method.
     }
 
     public function __wakeup(): void
     {
-        // TODO: Implement __wakeup() method.
     }
 }
