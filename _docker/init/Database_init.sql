@@ -1,0 +1,39 @@
+CREATE USER vlad  WITH PASSWORD 'password';
+CREATE DATABASE tennis_db;
+GRANT ALL PRIVILEGES ON DATABASE tennis_db TO vlad;
+
+\connect tennis_db;
+
+CREATE TABLE players
+(
+    ID       SERIAL PRIMARY KEY,
+    Name     VARCHAR(100)
+);
+
+INSERT INTO players (name)
+VALUES ('John'),
+       ('Alex'),
+       ('Dasha'),
+       ('Katya'),
+       ('Mark'),
+       ('Oleg'),
+       ('Masha');
+
+
+CREATE TABLE matches
+(
+    ID       SERIAL PRIMARY KEY,
+    Player1ID     INTEGER REFERENCES players (ID),
+    Player2ID     INTEGER REFERENCES players (ID),
+    WinnerID     INTEGER REFERENCES players (ID)
+);
+INSERT INTO matches (Player1ID, Player2ID, WinnerID)
+VALUES (1, 2, 1),
+       (1, 3, 1),
+       (1, 4, 1),
+       (1, 5, 5),
+       (1, 6, 6),
+       (4, 3, 4),
+       (3, 2, 2),
+       (5, 2, 5);
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO vlad;
