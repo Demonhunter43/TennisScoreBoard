@@ -12,7 +12,7 @@ class Router
         $path = parse_url($uri)["path"];
         $routes = require_once "routes.php";
 
-        if (!array_key_exists($path, $routes) && Router::isValidHttpMethod($httpMethod)) {
+        if (!array_key_exists($path, $routes) && self::isValidHttpMethod($httpMethod)) {
             header("Location: http://localhost:8876/matches");
         }
         return $routes[$path];
