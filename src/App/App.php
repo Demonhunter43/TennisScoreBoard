@@ -10,7 +10,7 @@ class App
     public static function run(): void
     {
         $request = new Request();
-        $controller = Router::getController($request->getUri());
-        $controller->run();
+        $controller = Router::getController($request->getUri(), $request->getMethod());
+        $controller->run($request->getUri(), $request->getMethod());
     }
 }

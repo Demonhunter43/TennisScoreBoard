@@ -23,5 +23,4 @@ readonly class Request
     {
         return $this->uri;
     }
-
 }

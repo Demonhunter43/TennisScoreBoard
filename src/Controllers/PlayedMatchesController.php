@@ -7,7 +7,7 @@ use src\View\FinishedMatchesView;
 
 class PlayedMatchesController extends Controller
 {
-    public function run(): void
+    public function run(string $httpMethod, string $uri): void
     {
         $dbAction = new DatabaseAction();
         try {

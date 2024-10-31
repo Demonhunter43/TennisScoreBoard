@@ -2,11 +2,11 @@
 
 namespace src\Controllers;
 
-use src\Front\MatchScoreView;
+use JetBrains\PhpStorm\NoReturn;
 
 class MatchScoreController extends Controller
 {
-    public function run(): void
+    #[NoReturn] public function run(string $httpMethod, string $uri): void
     {
         $matchScoreModel = new MatchScoreModel();
         $matchScoreView = new MatchScoreView();
