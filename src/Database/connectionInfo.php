@@ -1,7 +1,7 @@
 <?php
 
-$hostname = "127.0.0.1";
-$dbname = 'tennis';
-$login = 'root';
-$password = '';
-$port = 3306;
+$hostname = "database";
+$dbname = 'tennis_db';
+$user = 'postgress';
+$password = 'postgress';
+$port = 5432;

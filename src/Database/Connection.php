@@ -15,10 +15,11 @@ final class Connection
          * @var  $hostname ,
          * @var  $dbname ,
          * @var  $port ,
-         * @var  $login ,
+         * @var  $user ,
          * @var  $password
          */
-        self::$pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;", $login, $password);
+        //self::$pdoConnection = new \PDO("mysql:host=$hostname;dbname=$dbname;port=$port;", $user, $password);
+        self::$pdoConnection = new \PDO("pgsql:host=$hostname;port=$port;dbname=$dbname;user=$user;password=$password");
         //$this->pdoConnection = new \PDO('sqlite: tennis.db');
     }
 
