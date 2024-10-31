@@ -40,7 +40,7 @@ class FinishedMatchesView
                 <table>
                     <thead>
                     <tr>
-                        <th>match id</th>
+                        <th>Match id</th>
                         <th>Player 1</th>
                         <th>Player 2</th>
                         <th>Winner</th>
@@ -66,7 +66,6 @@ class FinishedMatchesView
         </section>
         </body>
         </html>
-
 
         <?php
         exit();

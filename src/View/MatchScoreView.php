@@ -4,7 +4,7 @@ namespace src\View;
 
 class MatchScoreView
 {
-    public function render(array $data, int $code): void
+    public static function render(array $data, int $code): void
     {
 
     }
