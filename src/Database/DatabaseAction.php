@@ -21,16 +21,16 @@ class DatabaseAction
     public function getAllMatches(): array
     {
         $sql = "SELECT  matches.ID,
-                        Player1.Name AS Player1Name,
-                        Player2.Name AS Player2Name,
-                        Winner.Name AS WinnerName
-                FROM `matches`
-                JOIN `players` AS player1
-                ON player1.ID = matches.Player1
-                JOIN `players` AS player2
-                ON player2.ID = matches.Player2
-                JOIN `players` AS winner
-                ON winner.ID = matches.Winner;";
+                        Player1.Name AS Player1_Name,
+                        Player2.Name AS Player2_Name,
+                        Winner.Name AS Winner_Name
+                FROM matches
+                JOIN players AS player1
+                ON player1.ID = matches.player1id
+                JOIN players AS player2
+                ON player2.ID = matches.player2id
+                JOIN players AS winner
+                ON winner.ID = matches.winnerid;";
 
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute();
@@ -66,17 +66,17 @@ class DatabaseAction
 
     public function makeObject(array $dataObject): MatchDTO|PlayerDTO
     {
-        if (array_key_exists("Name", $dataObject)) {
-            return new PlayerDTO($dataObject["ID"], $dataObject["Name"]);
+        if (array_key_exists("name", $dataObject)) {
+            return new PlayerDTO($dataObject["id"], $dataObject["name"]);
         } else {
-            $player1DTO = new PlayerDTO($dataObject["ID"], $dataObject["Player1Name"]);
-            $player2DTO = new PlayerDTO($dataObject["ID"], $dataObject["Player2Name"]);
-            if ($player1DTO->getName() == $dataObject["WinnerName"]) {
+            $player1DTO = new PlayerDTO($dataObject["id"], $dataObject["player1_name"]);
+            $player2DTO = new PlayerDTO($dataObject["id"], $dataObject["player2_name"]);
+            if ($player1DTO->getName() == $dataObject["winner_name"]) {
                 $winnerDTO = $player1DTO;
             } else {
                 $winnerDTO = $player2DTO;
             }
-            return new MatchDTO($dataObject["ID"], $player1DTO, $player2DTO, $winnerDTO);
+            return new MatchDTO($dataObject["id"], $player1DTO, $player2DTO, $winnerDTO);
         }
     }
 }

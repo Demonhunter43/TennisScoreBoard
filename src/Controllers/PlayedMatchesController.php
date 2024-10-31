@@ -13,10 +13,9 @@ class PlayedMatchesController extends Controller
         try {
             $arrayOfMatches = $dbAction->getAllMatches();
         } catch (\Exception $e){
-            $finishedMatchesView = new FinishedMatchesView();
-            $finishedMatchesView->render(null, 500);
+            var_dump($e->getMessage());
+            FinishedMatchesView::render(null, 500);
         }
-        $finishedMatchesView = new FinishedMatchesView();
-        $finishedMatchesView->render($arrayOfMatches, 200);
+        FinishedMatchesView::render($arrayOfMatches, 200);
     }
 }

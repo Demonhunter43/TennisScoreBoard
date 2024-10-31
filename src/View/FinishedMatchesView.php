@@ -12,7 +12,7 @@ class FinishedMatchesView
      * @param int $code
      * @return void
      */
-    #[NoReturn] public function render(?array $data, int $code): void
+    #[NoReturn] public static function render(?array $data, int $code): void
     {
         http_response_code($code);
         if (is_null($data)) {
@@ -25,13 +25,13 @@ class FinishedMatchesView
         <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <title>Сыгранные матчи</title>
+            <title>Played matches</title>
         </head>
         <body>
         <section>
             <header>
                 <div>
-                    <h1>Сыгранные матчи</h1>
+                    <h1>Played matches</h1>
                 </div>
             </header>
         </section>
@@ -40,10 +40,10 @@ class FinishedMatchesView
                 <table>
                     <thead>
                     <tr>
-                        <th>ID матча</th>
-                        <th>Игрок 1</th>
-                        <th>Игрок 2</th>
-                        <th>Победитель</th>
+                        <th>match id</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
+                        <th>Winner</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@ class FinishedMatchesView
                             <th><?= $matchDto->getPlayer1Name() ?></th>
                             <th><?= $matchDto->getPlayer2Name() ?></th>
                             <th><?= $matchDto->getWinnerName() ?></th>
-                        </tr>;
+                        </tr>
                     <?php } ?>
 
                     </tbody>
