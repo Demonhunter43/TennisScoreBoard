@@ -37,6 +37,18 @@ class DatabaseAction
         return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
     }
 
+    public function isPlayerPresentedInDatabase(PlayerDTO $player): bool
+    {
+        $playerName = $player->getName();
+        $sql = "SELECT EXISTS(SELECT 1 FROM players WHERE Name=:playerName);";
+        $stmt = $this->connection->getPdo()->prepare($sql);
+        $stmt->execute([
+            'playerName' => $playerName
+        ]);
+        $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return true;
+    }
+
     public function addFinishedMatch(MatchDTO $matchDTO): void
     {
         //TODO to implement this

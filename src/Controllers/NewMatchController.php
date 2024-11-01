@@ -11,7 +11,7 @@ class NewMatchController extends Controller
         if ($httpMethod == "GET") {
             $this->runGet();
         }
-        if ($httpMethod == "Post") {
+        if ($httpMethod == "POST") {
             $this->runPost($uri);
         }
     }

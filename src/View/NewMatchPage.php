@@ -25,16 +25,16 @@ class NewMatchPage
                 <input class="input-player" placeholder="Name" type="text" id="playerOne"
                        name="playerOne"
                        required
-                       pattern="[A-Za-z]"
+                       pattern="[A-Za-z]+"
                        minlength="3"
-                       title="Enter a name in the format <Name>">
+                       title="Enter a name in the format Name">
                 <label class="label-player" for="playerTwo">Player two</label>
                 <input class="input-player" placeholder="Name" type="text" id="playerTwo"
                        name="playerTwo"
                        required
-                       pattern="[A-Za-z]"
+                       pattern="[A-Za-z]+"
                        minlength="3"
-                       title="Enter a name in the format <Name>">
+                       title="Enter a name in the format Name">
                 <input class="form-button" type="submit" value="Start">
             </form>
         </section>
