@@ -21,16 +21,16 @@ class NewMatchPage
         </section>
         <section>
             <form method="post" action="#">
-                <label class="label-player" for="playerOne">Player one</label>
-                <input class="input-player" placeholder="Name" type="text" id="playerOne"
-                       name="playerOne"
+                <label class="label-player" for="playerOneName">Player one</label>
+                <input class="input-player" placeholder="Name" type="text" id="playerOneName"
+                       name="playerOneName"
                        required
                        pattern="[A-Za-z]+"
                        minlength="3"
                        title="Enter a name in the format Name">
-                <label class="label-player" for="playerTwo">Player two</label>
-                <input class="input-player" placeholder="Name" type="text" id="playerTwo"
-                       name="playerTwo"
+                <label class="label-player" for="playerTwoName">Player two</label>
+                <input class="input-player" placeholder="Name" type="text" id="playerTwoName"
+                       name="playerTwoName"
                        required
                        pattern="[A-Za-z]+"
                        minlength="3"

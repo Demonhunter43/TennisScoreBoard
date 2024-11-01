@@ -4,7 +4,7 @@ namespace src\DTO;
 
 class PlayerDTO
 {
-    private readonly int $id;
+    private readonly ?int $id;
     private readonly string $name;
 
     public function __construct(?int $id, string $name)

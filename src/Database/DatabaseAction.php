@@ -45,8 +45,7 @@ class DatabaseAction
         $stmt->execute([
             'playerName' => $playerName
         ]);
-        $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return true;
+        return (bool) $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
     }
 
     public function addFinishedMatch(MatchDTO $matchDTO): void
