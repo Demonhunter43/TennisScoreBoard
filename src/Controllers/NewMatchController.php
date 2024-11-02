@@ -40,8 +40,13 @@ class NewMatchController extends Controller
             }
         }
         if (!$databaseAction->isPlayerPresentedInDatabase($playerTwoDTO)) {
-            $databaseAction->addPlayer($playerTwoDTO);
+            try {
+                $databaseAction->addPlayer($playerTwoDTO);
+            } catch (\Exception $e) {
+                ErrorPage::render($e->getMessage(), 500);
+                return;
+            }
         }
-
+        PlayedMatchesController
     }
 }
