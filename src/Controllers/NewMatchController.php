@@ -21,7 +21,7 @@ class NewMatchController extends Controller
 
     public function runGet(): void
     {
-        NewMatchPage::render(null, 200);
+        NewMatchPage::render(200);
     }
 
     public function runPost(string $uri): void

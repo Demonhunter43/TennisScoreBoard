@@ -4,8 +4,10 @@ namespace src\View;
 
 class NewMatchPage
 {
-    public static function render(): void
-    { ?>
+    public static function render(int $code): void
+    {
+        http_response_code($code);
+        ?>
         <!doctype html>
         <html lang="en">
         <head>
