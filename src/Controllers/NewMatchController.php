@@ -47,6 +47,6 @@ class NewMatchController extends Controller
                 return;
             }
         }
-        PlayedMatchesController
+        //PlayedMatchesController
     }
 }

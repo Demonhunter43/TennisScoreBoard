@@ -20,21 +20,31 @@ class DatabaseAction
      */
     public function getAllMatches(): array
     {
-        $sql = "SELECT  matches.ID,
-                        Player1.Name AS Player1_Name,
-                        Player2.Name AS Player2_Name,
-                        Winner.Name AS Winner_Name
+        $sql = "SELECT  matches.id,
+                        Player1.name AS Player1_Name,
+                        Player2.name AS Player2_Name,
+                        Winner.name AS Winner_Name
                 FROM matches
                 JOIN players AS player1
-                ON player1.ID = matches.player1id
+                ON player1.id = matches.player1id
                 JOIN players AS player2
-                ON player2.ID = matches.player2id
+                ON player2.id = matches.player2id
                 JOIN players AS winner
-                ON winner.ID = matches.winnerid;";
+                ON winner.id = matches.winnerid;";
 
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute();
         return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
+    }
+
+    public function addPlayer(PlayerDTO $playerDTO): void
+    {
+        $sql = "INSERT INTO players
+        (id, name) VALUES (null, :playerName)";
+        $stmt = $this->connection->getPdo()->prepare($sql);
+        $stmt->execute([
+            'playerName' => $playerDTO->getName()
+        ]);
     }
 
     public function isPlayerPresentedInDatabase(PlayerDTO $player): bool
@@ -45,23 +55,18 @@ class DatabaseAction
         $stmt->execute([
             'playerName' => $playerName
         ]);
-        return (bool) $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
+        return (bool)$stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
     }
 
-    public function addFinishedMatch(MatchDTO $matchDTO): void
+    public function addMatch(MatchDTO $matchDTO): void
     {
-        //TODO to implement this
-        $code = $currency->getCode();
-        $fullName = $currency->getFullName();
-        $sign = $currency->getSign();
-        $sql = "INSERT INTO `currencies` 
-                (ID, Code, FullName, Sign) VALUES (null, :code, :fullName, :sign)";
-
+        $sql = "INSERT INTO matches
+        (id, player1id, player2id, winnerid) VALUES (null, :player1Id, :player2Id, :winnerId)";
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute([
-            'code' => $code,
-            'fullName' => $fullName,
-            'sign' => $sign
+            'player1Id' => $matchDTO->getPlayer1Name(),
+            'player2Id' => $matchDTO->getPlayer2Name(),
+            'winnerId' => $matchDTO->getWinnerName()
         ]);
     }
 
