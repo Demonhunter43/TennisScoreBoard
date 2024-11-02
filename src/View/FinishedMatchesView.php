@@ -12,13 +12,9 @@ class FinishedMatchesView
      * @param int $code
      * @return void
      */
-    #[NoReturn] public static function render(?array $data, int $code): void
+    #[NoReturn] public static function render(array $data, int $code): void
     {
         http_response_code($code);
-        if (is_null($data)) {
-            echo "Произошла какая-то ошибка, можно попробовать перезагрузить";
-            exit();
-        }
         ?>
 
         <!doctype html>
