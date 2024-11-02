@@ -1,4 +1,4 @@
-CREATE USER vlad  WITH PASSWORD 'password';
+CREATE USER vlad WITH PASSWORD 'password';
 CREATE DATABASE tennis_db;
 GRANT ALL PRIVILEGES ON DATABASE tennis_db TO vlad;
 
@@ -6,8 +6,8 @@ GRANT ALL PRIVILEGES ON DATABASE tennis_db TO vlad;
 
 CREATE TABLE players
 (
-    ID       SERIAL PRIMARY KEY,
-    Name     VARCHAR(100)
+    ID   SERIAL PRIMARY KEY,
+    Name VARCHAR(100)
 );
 
 INSERT INTO players (name)
@@ -22,10 +22,10 @@ VALUES ('John'),
 
 CREATE TABLE matches
 (
-    ID       SERIAL PRIMARY KEY,
-    Player1ID     INTEGER REFERENCES players (ID),
-    Player2ID     INTEGER REFERENCES players (ID),
-    WinnerID     INTEGER REFERENCES players (ID)
+    ID        SERIAL PRIMARY KEY,
+    Player1ID INTEGER REFERENCES players (ID),
+    Player2ID INTEGER REFERENCES players (ID),
+    WinnerID  INTEGER REFERENCES players (ID)
 );
 INSERT INTO matches (Player1ID, Player2ID, WinnerID)
 VALUES (1, 2, 1),
@@ -33,7 +33,16 @@ VALUES (1, 2, 1),
        (1, 4, 1),
        (1, 5, 5),
        (1, 6, 6),
-       (4, 3, 4),
-       (3, 2, 2),
-       (5, 2, 5);
+       (4, 2, 4),
+       (2, 3, 2),
+       (3, 4, 3),
+       (4, 5, 5),
+       (5, 6, 5),
+       (2, 5, 2),
+       (3, 7, 7),
+       (4, 6, 4),
+       (5, 1, 5),
+       (6, 2, 2),
+       (3, 5, 3),
+       (5, 7, 7);
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO vlad;
