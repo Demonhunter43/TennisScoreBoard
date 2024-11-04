@@ -36,6 +36,7 @@ class NewMatchController extends Controller
     {
         $playerOneDTO = new PlayerDTO(null, $postData["playerOneName"]);
         $playerTwoDTO = new PlayerDTO(null, $postData["playerTwoName"]);
+        $databaseAction = null;
         try {
             $databaseAction = new DatabaseAction();
         } catch (\Exception $e) {
@@ -60,7 +61,13 @@ class NewMatchController extends Controller
         $redisAction = new RedisAction();
         $zeroScore = new Score(0, 0);
         $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $zeroScore, $zeroScore, $zeroScore);
-        $newMatchId = $redisAction->addMatch($newOngoingMatch);
-
+        try {
+            $newMatchId = $redisAction->addMatch($newOngoingMatch);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            die();
+        }
+        // Redirect
+        header("Location: http://localhost:8876/match-score?uuid={$newMatchId}");
     }
 }

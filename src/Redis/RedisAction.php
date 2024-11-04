@@ -2,25 +2,28 @@
 
 namespace src\Redis;
 
-use src\DTO\MatchDTO;
 use src\Entity\OngoingMatch;
 use src\Exceptions\WrongIndexRedisException;
 
 readonly class RedisAction
 {
     private \Redis $redis;
+    private string $host;
 
     public function __construct()
     {
-        $this->redis = new \Redis([
-            'host' => "redis",
-            'port' => 6379
-        ]);
+        $this->redis = new \Redis();
+        $this->host = "redis";
     }
 
+
+    /**
+     * @throws WrongIndexRedisException
+     * @throws \RedisException
+     */
     public function getMatchById(int $id): OngoingMatch
     {
-        $this->redis->connect();
+        $this->redis->connect($this->host);
         $serializedMatch = $this->redis->get($id);
         if ($serializedMatch === false) {
             throw new WrongIndexRedisException();
@@ -29,9 +32,12 @@ readonly class RedisAction
         return $ongoingMatch;
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function addMatch(OngoingMatch $match): int
     {
-        $this->redis->connect();
+        $this->redis->connect($this->host);
         $lastIndex = $this->redis->get("lastIndex");
 
         if ($lastIndex === false) {
@@ -48,9 +54,13 @@ readonly class RedisAction
         return $lastIndex;
     }
 
+    /**
+     * @throws WrongIndexRedisException
+     * @throws \RedisException
+     */
     public function updateMatch(OngoingMatch $match, int $id): void
     {
-        $this->redis->connect();
+        $this->redis->connect($this->host);
         $serializedMatch = $this->redis->get($id);
         if ($serializedMatch === false) {
             throw new WrongIndexRedisException();
