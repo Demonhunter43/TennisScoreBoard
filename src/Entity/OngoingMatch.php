@@ -2,9 +2,9 @@
 
 namespace src\Entity;
 
-class OngoingMatch
+class OngoingMatch implements \JsonSerializable
 {
-    private ?int $id;
+    private ?int $ongoingId;
     private Player $player1;
     private Player $player2;
     private ?Player $winner;
@@ -27,16 +27,6 @@ class OngoingMatch
         $this->sets = new Score(0, 0);
         $this->games = new Score(0, 0);
         $this->points = new Score(0, 0);
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): void
-    {
-        $this->id = $id;
     }
 
     public function getPlayer1(): Player
@@ -89,5 +79,28 @@ class OngoingMatch
     public function setPoints(Score $points): void
     {
         $this->points = $points;
+    }
+
+
+    public function getOngoingId(): ?int
+    {
+        return $this->ongoingId;
+    }
+
+    public function setOngoingId(?int $ongoingId): void
+    {
+        $this->ongoingId = $ongoingId;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'ongoingId' => $this->ongoingId,
+            'player1' => $this->player1,
+            'player2' => $this->player2,
+            'sets' => $this->sets,
+            'games' => $this->games,
+            'points' => $this->points
+        ];
     }
 }

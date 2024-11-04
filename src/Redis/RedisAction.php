@@ -3,11 +3,11 @@
 namespace src\Redis;
 
 use src\DTO\MatchDTO;
+use src\Entity\OngoingMatch;
 
 class RedisAction
 {
     private readonly \Redis $redis;
-    private int $index;
 
     public function __construct()
     {
@@ -22,8 +22,24 @@ class RedisAction
 
     }
 
-    public function addMatch(): int
+    public function addMatch(OngoingMatch $match): int
     {
-        asd
+        $this->redis->connect();
+        $lastIndex = (int)$this->redis->get("lastIndex");
+
+        if ($lastIndex == 0) {
+            $this->redis->set("lastIndex", $lastIndex);
+        } else {
+            $lastIndex++;
+            $this->redis->set("lastIndex", $lastIndex);
+        }
+        $serializedMatch = "str"; //TODO json_encode $match
+        $this->redis->set($lastIndex, $serializedMatch);
+        return $lastIndex;
+    }
+
+    public function updateMatch(OngoingMatch $match, int $index): void
+    {
+
     }
 }

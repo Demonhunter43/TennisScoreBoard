@@ -2,7 +2,7 @@
 
 namespace src\Entity;
 
-class Score
+class Score implements \JsonSerializable
 {
     private int $firstPlayerScore;
     private int $secondPlayerScore;
@@ -16,10 +16,12 @@ class Score
         $this->firstPlayerScore = $firstPlayerScore;
         $this->secondPlayerScore = $secondPlayerScore;
     }
+
     public function getHighestScore(): int
     {
-        return max($this->firstPlayerScore,$this->secondPlayerScore);
+        return max($this->firstPlayerScore, $this->secondPlayerScore);
     }
+
     public function getDifference(): int
     {
         return abs($this->firstPlayerScore - $this->secondPlayerScore);
@@ -43,6 +45,14 @@ class Score
     public function setSecondPlayerScore(int $secondPlayerScore): void
     {
         $this->secondPlayerScore = $secondPlayerScore;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'firstPlayerScore' => $this->firstPlayerScore,
+            'secondPlayerScore' => $this->secondPlayerScore
+        ];
     }
 
 }

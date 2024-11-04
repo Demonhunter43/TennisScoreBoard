@@ -2,7 +2,7 @@
 
 namespace src\Entity;
 
-class Player
+class Player implements \JsonSerializable
 {
     private ?int $id;
     private string $name;
@@ -35,6 +35,14 @@ class Player
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name
+        ];
     }
 
 }
