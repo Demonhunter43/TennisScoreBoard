@@ -61,8 +61,10 @@ class DatabaseAction
         $stmt->execute([
             'playerName' => $name
         ]);
-        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if (!array_key_exists("id", $data)) {
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
+
+
+        if (is_null($data)) {
             throw new \Exception("No this player in database");
         }
         return $this->makeObject($data);
