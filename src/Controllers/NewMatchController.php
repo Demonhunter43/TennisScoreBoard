@@ -7,19 +7,22 @@ use src\DTO\PlayerDTO;
 use src\Entity\OngoingMatch;
 use src\Entity\Player;
 use src\Entity\Score;
+use src\Http\Request;
 use src\Redis\RedisAction;
 use src\View\ErrorPage;
 use src\View\NewMatchPage;
 
 class NewMatchController extends Controller
 {
-    public function run(string $uri, string $httpMethod): void
+    public function run(Request $request): void
     {
+        $httpMethod = $request->getMethod();
+
         if ($httpMethod == "GET") {
             $this->runGet();
         }
         if ($httpMethod == "POST") {
-            $this->runPost($uri);
+            $this->runPost($request->getPostData());
         }
         ErrorPage::render("Wrong HTTP Method", 405);
     }
@@ -29,10 +32,10 @@ class NewMatchController extends Controller
         NewMatchPage::render(200);
     }
 
-    public function runPost(): void
+    public function runPost(array $postData): void
     {
-        $playerOneDTO = new PlayerDTO(null, $_POST["playerOneName"]);
-        $playerTwoDTO = new PlayerDTO(null, $_POST["playerTwoName"]);
+        $playerOneDTO = new PlayerDTO(null, $postData["playerOneName"]);
+        $playerTwoDTO = new PlayerDTO(null, $postData["playerTwoName"]);
         try {
             $databaseAction = new DatabaseAction();
         } catch (\Exception $e) {

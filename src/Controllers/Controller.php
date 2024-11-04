@@ -2,9 +2,11 @@
 
 namespace src\Controllers;
 
+use src\Http\Request;
+
 abstract class Controller
 {
-    public function run(string $httpMethod, string $uri)
+    public function run(Request $request)
     {
 
     }
