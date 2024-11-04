@@ -33,7 +33,7 @@ class RedisAction
             $lastIndex++;
             $this->redis->set("lastIndex", $lastIndex);
         }
-        $serializedMatch = "str"; //TODO json_encode $match
+        $serializedMatch = json_encode($match);
         $this->redis->set($lastIndex, $serializedMatch);
         return $lastIndex;
     }
