@@ -2,7 +2,7 @@
 
 namespace src\Entity;
 
-class TennisMatch
+class OngoingMatch
 {
     private ?int $id;
     private Player $player1;
