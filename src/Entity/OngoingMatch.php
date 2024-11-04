@@ -95,14 +95,14 @@ class OngoingMatch implements \JsonSerializable
 
     public static function deserialize(string $serializeMatch): self
     {
-        $matchArray = json_decode($serializeMatch);
+        $matchArray = (array)json_decode($serializeMatch);
 
-        $player1 = Player::deserialize((string)$matchArray["player1"]);
-        $player2 = Player::deserialize((string)$matchArray["player2"]);
+        $player1 = Player::deserialize((array)$matchArray["player1"]);
+        $player2 = Player::deserialize((array)$matchArray["player2"]);
 
-        $sets = Score::deserialize((string)$matchArray["sets"]);
-        $games = Score::deserialize((string)$matchArray["games"]);
-        $points = Score::deserialize((string)$matchArray["points"]);
+        $sets = Score::deserialize((array)$matchArray["sets"]);
+        $games = Score::deserialize((array)$matchArray["games"]);
+        $points = Score::deserialize((array)$matchArray["points"]);
 
         return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $sets, $games, $points);
     }

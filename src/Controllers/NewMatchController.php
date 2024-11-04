@@ -56,8 +56,8 @@ class NewMatchController extends Controller
 
         $player1 = new Player($playerOneDTO->getId(), $playerOneDTO->getName());
         $player2 = new Player($playerTwoDTO->getId(), $playerTwoDTO->getName());
-
         $redisAction = new RedisAction();
+
         $zeroScore = new Score(0, 0);
         $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $zeroScore, $zeroScore, $zeroScore);
         try {

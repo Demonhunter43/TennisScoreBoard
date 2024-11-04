@@ -13,7 +13,7 @@ readonly class RedisAction
     public function __construct()
     {
         $this->redis = new \Redis();
-        $this->host = "redis";
+        $this->host = "172.25.0.3";
     }
 
 
@@ -37,17 +37,18 @@ readonly class RedisAction
      */
     public function addMatch(OngoingMatch $match): int
     {
+
         $this->redis->connect($this->host);
         $lastIndex = $this->redis->get("lastIndex");
 
         if ($lastIndex === false) {
             $lastIndex = 0;
-            $this->redis->set("lastIndex", $lastIndex);
         } else {
             $lastIndex = (int)$lastIndex;
             $lastIndex++;
-            $this->redis->set("lastIndex", $lastIndex);
         }
+        $this->redis->set("lastIndex", $lastIndex);
+
         $match->setOngoingId($lastIndex);
         $serializedMatch = json_encode($match);
         $this->redis->set($lastIndex, $serializedMatch);

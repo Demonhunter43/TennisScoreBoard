@@ -37,10 +37,9 @@ class Player implements \JsonSerializable
         $this->name = $name;
     }
 
-    public static function deserialize(string $serializePlayer): self
+    public static function deserialize(array $arrayPlayer): self
     {
-        $playerData = json_decode($serializePlayer);
-        return new Player($playerData["id"], $playerData["name"]);
+        return new Player($arrayPlayer["id"], $arrayPlayer["name"]);
     }
 
     public function jsonSerialize(): array

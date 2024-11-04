@@ -55,9 +55,8 @@ class Score implements \JsonSerializable
         ];
     }
 
-    public static function deserialize(string $serializeScore): self
+    public static function deserialize(array $arrayScore): self
     {
-        $scoreArray = json_decode($serializeScore);
-        return new Score($scoreArray["firstPlayerScore"], $scoreArray["secondPlayerScore"]);
+        return new Score($arrayScore["firstPlayerScore"], $arrayScore["secondPlayerScore"]);
     }
 }
