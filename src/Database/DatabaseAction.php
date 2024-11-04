@@ -37,10 +37,13 @@ class DatabaseAction
         return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function addPlayer(PlayerDTO $playerDTO): PlayerDTO
     {
         $sql = "INSERT INTO players
-        (id, name) VALUES (null, :playerName)";
+        (name) VALUES (:playerName)";
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute([
             'playerName' => $playerDTO->getName()
@@ -48,6 +51,9 @@ class DatabaseAction
         return $this->getPlayerByName($playerDTO->getName());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getPlayerByName(string $name): PlayerDTO
     {
         $sql = "SELECT * FROM players WHERE name=:playerName";
@@ -55,10 +61,14 @@ class DatabaseAction
         $stmt->execute([
             'playerName' => $name
         ]);
-        return $this->makeObject(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if (!array_key_exists("id", $data)) {
+            throw new \Exception("No this player in database");
+        }
+        return $this->makeObject($data);
     }
 
-    public function isPlayerPresentedInDatabase(PlayerDTO $player): bool
+    /*public function isPlayerPresentedInDatabase(PlayerDTO $player): bool
     {
         $playerName = $player->getName();
         $sql = "SELECT EXISTS(SELECT 1 FROM players WHERE Name=:playerName);";
@@ -67,7 +77,7 @@ class DatabaseAction
             'playerName' => $playerName
         ]);
         return (bool)$stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
-    }
+    }*/
 
     public function addMatch(MatchDTO $matchDTO): void
     {

@@ -9,6 +9,12 @@ class MatchScoreController extends Controller
 {
     #[NoReturn] public function run(Request $request): void
     {
+
+        echo "We are in Match Score Controller";
+        echo "We are in Match Score Controller";
+        die();
+
+
         $uri = $request->getUri();
         $httpMethod = $request->getMethod();
         $matchScoreModel = new MatchScoreModel();

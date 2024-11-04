@@ -24,7 +24,6 @@ class NewMatchController extends Controller
         if ($httpMethod == "POST") {
             $this->runPost($request->getPostData());
         }
-        ErrorPage::render("Wrong HTTP Method", 405);
     }
 
     public function runGet(): void

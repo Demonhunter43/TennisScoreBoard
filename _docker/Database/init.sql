@@ -6,8 +6,8 @@ GRANT ALL PRIVILEGES ON DATABASE tennis_db TO vlad;
 
 CREATE TABLE players
 (
-    ID   SERIAL PRIMARY KEY,
-    Name VARCHAR(100)
+    ID   SERIAL PRIMARY KEY UNIQUE,
+    Name VARCHAR(100) UNIQUE
 );
 
 INSERT INTO players (name)
@@ -22,7 +22,7 @@ VALUES ('John'),
 
 CREATE TABLE matches
 (
-    ID        SERIAL PRIMARY KEY,
+    ID        SERIAL PRIMARY KEY UNIQUE,
     Player1ID INTEGER REFERENCES players (ID),
     Player2ID INTEGER REFERENCES players (ID),
     WinnerID  INTEGER REFERENCES players (ID)
