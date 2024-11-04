@@ -7,27 +7,28 @@ class OngoingMatch implements \JsonSerializable
     private ?int $ongoingId;
     private Player $player1;
     private Player $player2;
-    private ?Player $winner;
     private Score $sets;
     private Score $games;
     private Score $points;
 
     /**
-     * @param int|null $id
+     * @param int|null $ongoingId
      * @param Player $player1
      * @param Player $player2
-     * @param Player|null $winner
+     * @param Score $sets
+     * @param Score $games
+     * @param Score $points
      */
-    public function __construct(?int $id, Player $player1, Player $player2, ?Player $winner)
+    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $sets, Score $games, Score $points)
     {
-        $this->id = $id;
+        $this->ongoingId = $ongoingId;
         $this->player1 = $player1;
         $this->player2 = $player2;
-        $this->winner = $winner;
-        $this->sets = new Score(0, 0);
-        $this->games = new Score(0, 0);
-        $this->points = new Score(0, 0);
+        $this->sets = $sets;
+        $this->games = $games;
+        $this->points = $points;
     }
+
 
     public function getPlayer1(): Player
     {
@@ -90,6 +91,20 @@ class OngoingMatch implements \JsonSerializable
     public function setOngoingId(?int $ongoingId): void
     {
         $this->ongoingId = $ongoingId;
+    }
+
+    public static function deserialize(string $serializeMatch): self
+    {
+        $matchArray = json_decode($serializeMatch);
+
+        $player1 = Player::deserialize((string)$matchArray["player1"]);
+        $player2 = Player::deserialize((string)$matchArray["player2"]);
+
+        $sets = Score::deserialize((string)$matchArray["sets"]);
+        $games = Score::deserialize((string)$matchArray["games"]);
+        $points = Score::deserialize((string)$matchArray["points"]);
+
+        return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $sets, $games, $points);
     }
 
     public function jsonSerialize(): array
