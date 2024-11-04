@@ -3,6 +3,7 @@
 namespace src\Controllers;
 
 use JetBrains\PhpStorm\NoReturn;
+use src\Exceptions\WrongIndexRedisException;
 use src\Http\Request;
 use src\Redis\RedisAction;
 
@@ -10,10 +11,17 @@ class MatchScoreController extends Controller
 {
     #[NoReturn] public function run(Request $request): void
     {
-        $
-        $ongoingMatchId = $request->getUri();
+        $query = parse_url($request->getUri(), PHP_URL_QUERY);
+        parse_str($query, $ongoingMatchId);
+        $ongoingMatchId = (int)$ongoingMatchId["uuid"];
+
         $redis = new RedisAction();
-        $ongoingMatch = $redis->getMatchById(0);
+        try {
+            $ongoingMatch = $redis->getMatchById($ongoingMatchId);
+        } catch (\Exception $e){
+            var_dump($e->getMessage());
+            exit();
+        }
         var_dump($ongoingMatch);
         die();
 
