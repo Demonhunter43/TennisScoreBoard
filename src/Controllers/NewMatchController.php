@@ -4,6 +4,10 @@ namespace src\Controllers;
 
 use src\Database\DatabaseAction;
 use src\DTO\PlayerDTO;
+use src\Entity\OngoingMatch;
+use src\Entity\Player;
+use src\Entity\Score;
+use src\Redis\RedisAction;
 use src\View\ErrorPage;
 use src\View\NewMatchPage;
 
@@ -17,6 +21,7 @@ class NewMatchController extends Controller
         if ($httpMethod == "POST") {
             $this->runPost($uri);
         }
+        ErrorPage::render("Wrong HTTP Method", 405);
     }
 
     public function runGet(): void
@@ -24,29 +29,35 @@ class NewMatchController extends Controller
         NewMatchPage::render(200);
     }
 
-    public function runPost(string $uri): void
+    public function runPost(): void
     {
         $playerOneDTO = new PlayerDTO(null, $_POST["playerOneName"]);
         $playerTwoDTO = new PlayerDTO(null, $_POST["playerTwoName"]);
-        $databaseAction = new DatabaseAction();
+        try {
+            $databaseAction = new DatabaseAction();
+        } catch (\Exception $e) {
+            ErrorPage::render($e->getMessage(), 500);
+        }
 
-        // Checking are players presented in DB
-        if (!$databaseAction->isPlayerPresentedInDatabase($playerOneDTO)) {
-            try {
-                $databaseAction->addPlayer($playerOneDTO);
-            } catch (\Exception $e) {
-                ErrorPage::render($e->getMessage(), 500);
-                return;
-            }
+        try {
+            $playerOneDTO = $databaseAction->getPlayerByName($playerOneDTO->getName());
+        } catch (\Exception $e) {
+            $playerOneDTO = $databaseAction->addPlayer($playerOneDTO);
         }
-        if (!$databaseAction->isPlayerPresentedInDatabase($playerTwoDTO)) {
-            try {
-                $databaseAction->addPlayer($playerTwoDTO);
-            } catch (\Exception $e) {
-                ErrorPage::render($e->getMessage(), 500);
-                return;
-            }
+
+        try {
+            $playerTwoDTO = $databaseAction->getPlayerByName($playerTwoDTO->getName());
+        } catch (\Exception $e) {
+            $playerTwoDTO = $databaseAction->addPlayer($playerTwoDTO);
         }
-        //PlayedMatchesController
+
+        $player1 = new Player($playerOneDTO->getId(), $playerOneDTO->getName());
+        $player2 = new Player($playerTwoDTO->getId(), $playerTwoDTO->getName());
+
+        $redisAction = new RedisAction();
+        $zeroScore = new Score(0, 0);
+        $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $zeroScore, $zeroScore, $zeroScore);
+        $newMatchId = $redisAction->addMatch($newOngoingMatch);
+
     }
 }

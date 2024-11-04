@@ -37,7 +37,7 @@ class DatabaseAction
         return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
     }
 
-    public function addPlayer(PlayerDTO $playerDTO): void
+    public function addPlayer(PlayerDTO $playerDTO): PlayerDTO
     {
         $sql = "INSERT INTO players
         (id, name) VALUES (null, :playerName)";
@@ -45,6 +45,17 @@ class DatabaseAction
         $stmt->execute([
             'playerName' => $playerDTO->getName()
         ]);
+        return $this->getPlayerByName($playerDTO->getName());
+    }
+
+    public function getPlayerByName(string $name): PlayerDTO
+    {
+        $sql = "SELECT * FROM players WHERE name=:playerName";
+        $stmt = $this->connection->getPdo()->prepare($sql);
+        $stmt->execute([
+            'playerName' => $name
+        ]);
+        return $this->makeObject(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
     }
 
     public function isPlayerPresentedInDatabase(PlayerDTO $player): bool

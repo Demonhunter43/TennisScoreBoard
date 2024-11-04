@@ -6,9 +6,9 @@ use src\DTO\MatchDTO;
 use src\Entity\OngoingMatch;
 use src\Exceptions\WrongIndexRedisException;
 
-class RedisAction
+readonly class RedisAction
 {
-    private readonly \Redis $redis;
+    private \Redis $redis;
 
     public function __construct()
     {
@@ -42,6 +42,7 @@ class RedisAction
             $lastIndex++;
             $this->redis->set("lastIndex", $lastIndex);
         }
+        $match->setOngoingId($lastIndex);
         $serializedMatch = json_encode($match);
         $this->redis->set($lastIndex, $serializedMatch);
         return $lastIndex;
