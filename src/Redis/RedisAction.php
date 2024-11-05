@@ -13,7 +13,7 @@ readonly class RedisAction
     public function __construct()
     {
         $this->redis = new \Redis();
-        $this->host = "172.25.0.3";
+        $this->host = "redis";
     }
 
 
@@ -28,8 +28,8 @@ readonly class RedisAction
         if ($serializedMatch === false) {
             throw new WrongIndexRedisException();
         }
-        $ongoingMatch = OngoingMatch::deserialize($serializedMatch);
-        return $ongoingMatch;
+
+        return OngoingMatch::deserialize($serializedMatch);
     }
 
     /**

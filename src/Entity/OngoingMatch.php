@@ -22,8 +22,9 @@ class OngoingMatch implements \JsonSerializable
         $this->finishedSetsCounter = $finishedSetsCounter;
         $this->points = $points;
         if (is_null($gamesInSets)) {
-            $zeroScore = new Score(0, 0);
-            $this->gamesInSets = array($zeroScore, $zeroScore, $zeroScore, $zeroScore, $zeroScore);
+            for ($i = 0; $i < 5; $i++) {
+                $this->gamesInSets[$i] = new Score(0, 0);
+            }
         } else {
             $this->gamesInSets = $gamesInSets;
         }
@@ -100,11 +101,14 @@ class OngoingMatch implements \JsonSerializable
         $player1 = Player::deserialize((array)$matchArray["player1"]);
         $player2 = Player::deserialize((array)$matchArray["player2"]);
 
-        $sets = Score::deserialize((array)$matchArray["sets"]);
-        $games = Score::deserialize((array)$matchArray["games"]);
+
         $points = Score::deserialize((array)$matchArray["points"]);
 
-        return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $sets, $games, $points);
+        $gamesInSetsData = $matchArray["gamesInSets"];
+        for ($i = 0; $i<5; $i++){
+            $gamesInSets[$i] = Score::deserialize((array)$gamesInSetsData[$i]);
+        }
+        return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $points, $matchArray["finishedSetsCounter"], $gamesInSets);
     }
 
     public function jsonSerialize(): array

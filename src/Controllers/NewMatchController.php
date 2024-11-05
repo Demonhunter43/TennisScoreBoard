@@ -66,15 +66,13 @@ class NewMatchController extends Controller
         $player2 = new Player($playerTwoDTO->getId(), $playerTwoDTO->getName());
         $redisAction = new RedisAction();
 
-        $zeroScore = new Score(0, 0);
         $newOngoingMatch = new OngoingMatch(null, $player1, $player2);
         try {
             $newMatchId = $redisAction->addMatch($newOngoingMatch);
             $newOngoingMatch->setOngoingId($newMatchId);
             $redisAction->updateMatch($newOngoingMatch);
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die();
+            ErrorPage::render($e->getMessage(), 400);
         }
         // Redirect
         header("Location: http://localhost:8876/match-score?uuid={$newMatchId}");

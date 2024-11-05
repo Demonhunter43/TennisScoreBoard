@@ -63,7 +63,6 @@ class MatchScoreController extends Controller
             $this->redisAction->deleteMatchById($ongoingMatch->getOngoingId());
             FinishedMatchesPersistenceService::saveFinishedMatch($ongoingMatch);
         }
-
         MatchScoreView::render($ongoingMatch, 200);
     }
 
