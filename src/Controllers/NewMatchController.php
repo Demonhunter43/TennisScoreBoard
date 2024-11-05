@@ -45,13 +45,21 @@ class NewMatchController extends Controller
         try {
             $playerOneDTO = $databaseAction->getPlayerByName($playerOneDTO->getName());
         } catch (\Exception $e) {
-            $playerOneDTO = $databaseAction->addPlayer($playerOneDTO);
+            try {
+                $playerOneDTO = $databaseAction->addPlayer($playerOneDTO);
+            } catch (\Exception $e) {
+                ErrorPage::render($e->getMessage(), 500);
+            }
         }
 
         try {
             $playerTwoDTO = $databaseAction->getPlayerByName($playerTwoDTO->getName());
         } catch (\Exception $e) {
-            $playerTwoDTO = $databaseAction->addPlayer($playerTwoDTO);
+            try {
+                $playerTwoDTO = $databaseAction->addPlayer($playerTwoDTO);
+            } catch (\Exception $e) {
+                ErrorPage::render($e->getMessage(), 500);
+            }
         }
 
         $player1 = new Player($playerOneDTO->getId(), $playerOneDTO->getName());
@@ -59,9 +67,11 @@ class NewMatchController extends Controller
         $redisAction = new RedisAction();
 
         $zeroScore = new Score(0, 0);
-        $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $zeroScore, $zeroScore, $zeroScore);
+        $newOngoingMatch = new OngoingMatch(null, $player1, $player2);
         try {
             $newMatchId = $redisAction->addMatch($newOngoingMatch);
+            $newOngoingMatch->setOngoingId($newMatchId);
+            $redisAction->updateMatch($newOngoingMatch);
         } catch (\Exception $e) {
             echo $e->getMessage();
             die();

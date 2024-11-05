@@ -8,28 +8,25 @@ class OngoingMatch implements \JsonSerializable
     private Player $player1;
     private Player $player2;
     private ?Player $winner;
-    private Score $sets;
-    private Score $games;
+    private int $finishedSetsCounter;
+    private ?array $gamesInSets;
     private Score $points;
 
-    /**
-     * @param int|null $ongoingId
-     * @param Player $player1
-     * @param Player $player2
-     * @param Score $sets
-     * @param Score $games
-     * @param Score $points
-     * @param Player|null $winner
-     */
-    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $sets, Score $games, Score $points, Player $winner = null)
+
+    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $points = new Score(0, 0), int $finishedSetsCounter = 0, array $gamesInSets = null, ?Player $winner = null)
     {
         $this->ongoingId = $ongoingId;
         $this->player1 = $player1;
         $this->player2 = $player2;
-        $this->sets = $sets;
-        $this->games = $games;
-        $this->points = $points;
         $this->winner = $winner;
+        $this->finishedSetsCounter = $finishedSetsCounter;
+        $this->points = $points;
+        if (is_null($gamesInSets)) {
+            $zeroScore = new Score(0, 0);
+            $this->gamesInSets = array($zeroScore, $zeroScore, $zeroScore, $zeroScore, $zeroScore);
+        } else {
+            $this->gamesInSets = $gamesInSets;
+        }
     }
 
 
@@ -116,8 +113,8 @@ class OngoingMatch implements \JsonSerializable
             'ongoingId' => $this->ongoingId,
             'player1' => $this->player1,
             'player2' => $this->player2,
-            'sets' => $this->sets,
-            'games' => $this->games,
+            'finishedSetsCounter' => $this->finishedSetsCounter,
+            'gamesInSets' => $this->gamesInSets,
             'points' => $this->points,
             'winner' => $this->winner
         ];
