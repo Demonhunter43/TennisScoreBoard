@@ -33,11 +33,7 @@ class MatchScoreController extends Controller
 
     public function runGet(Request $request): void
     {
-        parse_str(parse_url($request->getUri(), PHP_URL_QUERY), $queryArray);
-        if (!array_key_exists("uuid", $queryArray)) {
-            ErrorPage::render("Wrong query", 422);
-        }
-        $ongoingMatchId = (int)$queryArray["uuid"];
+        $ongoingMatchId = $this->getCheckedUuid($request);
 
         try {
             $ongoingMatch = $this->redisAction->getMatchById($ongoingMatchId);
@@ -45,12 +41,28 @@ class MatchScoreController extends Controller
             ErrorPage::render($e->getMessage(), 400);
         }
         MatchScoreView::render($ongoingMatch, 200);
-        //var_dump($ongoingMatch);
     }
 
-    private function runPost(Request $request)
+    private function runPost(Request $request): void
     {
+        $ongoingMatchId = $this->getCheckedUuid($request);
+
+        try {
+            $ongoingMatch = $this->redisAction->getMatchById($ongoingMatchId);
+        } catch (\Exception $e) {
+            ErrorPage::render($e->getMessage(), 400);
+        }
+        $pointWinnerId = $request->getPostData()["pointWinnerId"];
 
         MatchScoreView::render($ongoingMatch, 200);
+    }
+
+    private function getCheckedUuid(Request $request): int
+    {
+        parse_str(parse_url($request->getUri(), PHP_URL_QUERY), $queryArray);
+        if (!array_key_exists("uuid", $queryArray)) {
+            ErrorPage::render("Wrong query", 422);
+        }
+        return (int)$queryArray["uuid"];
     }
 }
