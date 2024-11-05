@@ -7,6 +7,7 @@ class OngoingMatch implements \JsonSerializable
     private ?int $ongoingId;
     private Player $player1;
     private Player $player2;
+    private ?Player $winner;
     private Score $sets;
     private Score $games;
     private Score $points;
@@ -18,8 +19,9 @@ class OngoingMatch implements \JsonSerializable
      * @param Score $sets
      * @param Score $games
      * @param Score $points
+     * @param Player|null $winner
      */
-    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $sets, Score $games, Score $points)
+    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $sets, Score $games, Score $points, Player $winner = null)
     {
         $this->ongoingId = $ongoingId;
         $this->player1 = $player1;
@@ -27,6 +29,7 @@ class OngoingMatch implements \JsonSerializable
         $this->sets = $sets;
         $this->games = $games;
         $this->points = $points;
+        $this->winner = $winner;
     }
 
 
@@ -115,7 +118,8 @@ class OngoingMatch implements \JsonSerializable
             'player2' => $this->player2,
             'sets' => $this->sets,
             'games' => $this->games,
-            'points' => $this->points
+            'points' => $this->points,
+            'winner' => $this->winner
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace src\Controllers;
 use JetBrains\PhpStorm\NoReturn;
 use src\Http\Request;
 use src\Redis\RedisAction;
+use src\Services\FinishedMatchesPersistenceService;
+use src\Services\MatchScoreCalculationService;
 use src\View\ErrorPage;
 use src\View\MatchScoreView;
 
@@ -46,13 +48,21 @@ class MatchScoreController extends Controller
     private function runPost(Request $request): void
     {
         $ongoingMatchId = $this->getCheckedUuid($request);
+        $pointWinnerId = $request->getPostData()["pointWinnerId"];
 
         try {
             $ongoingMatch = $this->redisAction->getMatchById($ongoingMatchId);
         } catch (\Exception $e) {
             ErrorPage::render($e->getMessage(), 400);
         }
-        $pointWinnerId = $request->getPostData()["pointWinnerId"];
+
+        $ongoingMatch = MatchScoreCalculationService::calculate($ongoingMatch, $pointWinnerId);
+        if (is_null($ongoingMatch->getWinner())) {
+            $this->redisAction->updateMatch($ongoingMatch);
+        } else {
+            $this->redisAction->deleteMatchById($ongoingMatch->getOngoingId());
+            FinishedMatchesPersistenceService::saveFinishedMatch($ongoingMatch);
+        }
 
         MatchScoreView::render($ongoingMatch, 200);
     }

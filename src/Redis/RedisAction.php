@@ -55,18 +55,15 @@ readonly class RedisAction
         return $lastIndex;
     }
 
-    /**
-     * @throws WrongIndexRedisException
-     * @throws \RedisException
-     */
-    public function updateMatch(OngoingMatch $match, int $id): void
+
+    public function updateMatch(OngoingMatch $match): void
     {
-        $this->redis->connect($this->host);
-        $serializedMatch = $this->redis->get($id);
-        if ($serializedMatch === false) {
-            throw new WrongIndexRedisException();
-        }
+        $id = $match->getOngoingId();
         $serializedMatch = json_encode($match);
         $this->redis->set($id, $serializedMatch);
+    }
+
+    public function deleteMatchById(?int $getOngoingId)
+    {
     }
 }
