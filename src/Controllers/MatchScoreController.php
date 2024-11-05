@@ -5,6 +5,7 @@ namespace src\Controllers;
 use JetBrains\PhpStorm\NoReturn;
 use src\Http\Request;
 use src\Redis\RedisAction;
+use src\View\ErrorPage;
 use src\View\MatchScoreView;
 
 class MatchScoreController extends Controller
@@ -32,15 +33,16 @@ class MatchScoreController extends Controller
 
     public function runGet(Request $request): void
     {
-        $query = parse_url($request->getUri(), PHP_URL_QUERY);
-        parse_str($query, $ongoingMatchId);
-        $ongoingMatchId = (int)$ongoingMatchId["uuid"];
+        parse_str(parse_url($request->getUri(), PHP_URL_QUERY), $queryArray);
+        if (!array_key_exists("uuid", $queryArray)) {
+            ErrorPage::render("Wrong query", 422);
+        }
+        $ongoingMatchId = (int)$queryArray["uuid"];
 
         try {
             $ongoingMatch = $this->redisAction->getMatchById($ongoingMatchId);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            exit();
+            ErrorPage::render($e->getMessage(), 400);
         }
         MatchScoreView::render($ongoingMatch, 200);
         //var_dump($ongoingMatch);
@@ -49,5 +51,6 @@ class MatchScoreController extends Controller
     private function runPost(Request $request)
     {
 
+        MatchScoreView::render($ongoingMatch, 200);
     }
 }

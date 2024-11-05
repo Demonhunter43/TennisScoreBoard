@@ -2,11 +2,12 @@
 
 namespace src\View;
 
+use JetBrains\PhpStorm\NoReturn;
 use src\Entity\OngoingMatch;
 
 class MatchScoreView
 {
-    public static function render(OngoingMatch $ongoingMatch, int $code): void
+    #[NoReturn] public static function render(OngoingMatch $ongoingMatch, int $code): void
     {
 
     }

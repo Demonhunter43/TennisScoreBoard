@@ -2,9 +2,11 @@
 
 namespace src\View;
 
+use JetBrains\PhpStorm\NoReturn;
+
 class ErrorPage
 {
-    public static function render(string $errorMessage, int $code): void
+    #[NoReturn] public static function render(string $errorMessage, int $code): void
     {
         http_response_code($code);
         ?>
