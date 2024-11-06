@@ -20,11 +20,31 @@ class MatchScoreView
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <title>Tennis score board</title>
         </head>
+        <style>
+            th, td {
+                padding: 15px;
+                font-size: x-large;
+            }
+
+            th {
+                background: #3b3939;
+                color: white;
+            }
+
+            td {
+                background: #ffd165;
+                text-align: center;
+            }
+
+            h1 {
+                padding-left: 250px;
+            }
+        </style>
         <body>
         <section>
             <header>
                 <div>
-                    <h1>Match number <?= $ongoingMatch->getOngoingId() ?> score board</h1>
+                    <h1>Score board match <?= $ongoingMatch->getOngoingId() ?></h1>
                 </div>
             </header>
         </section>
@@ -34,14 +54,56 @@ class MatchScoreView
                     <thead>
                     <tr>
                         <th>Player Name</th>
-                        <th>Game</th>
                         <th>SET1</th>
                         <th>SET2</th>
                         <th>SET3</th>
                         <th>SET4</th>
                         <th>SET5</th>
+                        <th>GAME</th>
                     </tr>
                     </thead>
+                    <tbody>
+                    <tr>
+                        <td><?= $ongoingMatch->getPlayer1()->getName() ?></td>
+                        <?php
+                        $gamesInSets = $ongoingMatch->getGamesInSets();
+                        foreach ($gamesInSets as $gameInSet) {
+                            ?>
+                            <td><?= $gameInSet->getFirstPlayerScore(); ?></td>
+                        <?php } ?>
+                        <td><?= $ongoingMatch->getPoints()->getFirstPlayerScore(); ?></td>
+                        <td>
+                            <form method="post" action="#">
+                                <label class="label-player" for="serveWinner"></label>
+                                <input class="input-player" id="serveWinner"
+                                       hidden="hidden"
+                                       name="serveWinnerID"
+                                       value="<?= $ongoingMatch->getPlayer1()->getId() ?>">
+                                <input class="form-button" type="submit" value="Wins this serve!">
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?= $ongoingMatch->getPlayer2()->getName() ?></td>
+                        <?php
+                        $gamesInSets = $ongoingMatch->getGamesInSets();
+                        foreach ($gamesInSets as $gameInSet) {
+                            ?>
+                            <td><?= $gameInSet->getSecondPlayerScore(); ?></td>
+                        <?php } ?>
+                        <td><?= $ongoingMatch->getPoints()->getSecondPlayerScore(); ?></td>
+                        <td>
+                            <form method="post" action="#">
+                                <label class="label-player" for="serveWinner"></label>
+                                <input class="input-player" id="serveWinner"
+                                       hidden="hidden"
+                                       name="serveWinnerID"
+                                       value="<?= $ongoingMatch->getPlayer2()->getId() ?>">
+                                <input class="form-button" type="submit" value="Wins this serve!">
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
         </section>

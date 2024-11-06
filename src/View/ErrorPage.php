@@ -27,5 +27,6 @@ class ErrorPage
         </body>
         </html>
         <?php
+        die();
     }
 }

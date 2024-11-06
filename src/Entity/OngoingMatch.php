@@ -111,6 +111,16 @@ class OngoingMatch implements \JsonSerializable
         return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $points, $matchArray["finishedSetsCounter"], $gamesInSets);
     }
 
+    public function getFinishedSetsCounter(): int
+    {
+        return $this->finishedSetsCounter;
+    }
+
+    public function getGamesInSets(): ?array
+    {
+        return $this->gamesInSets;
+    }
+
     public function jsonSerialize(): array
     {
         return [

@@ -47,6 +47,9 @@ class MatchScoreController extends Controller
 
     private function runPost(Request $request): void
     {
+        $postData = $request->getPostData();
+        var_dump($request->getPostData());
+        die();
         $ongoingMatchId = $this->getCheckedUuid($request);
         $pointWinnerId = $request->getPostData()["pointWinnerId"];
 
