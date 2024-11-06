@@ -10,15 +10,14 @@ class Router
 
     public static function getController(Request $request): Controller
     {
-        $uri = $request->getUri();
         $httpMethod = $request->getMethod();
-        $path = parse_url($uri)["path"];
+        $parsedUri = parse_url($request->getUri());
         $routes = require_once "routes.php";
 
-        if (!array_key_exists($path, $routes) && self::isValidHttpMethod($httpMethod)) {
-            header("Location: http://localhost:8876/matches");
+        if (!array_key_exists($parsedUri["path"], $routes) && self::isValidHttpMethod($httpMethod)) {
+            header("Location: {$parsedUri["scheme"]}://{$parsedUri["host"]}:{$parsedUri["port"]}/matches");
         }
-        return $routes[$path];
+        return $routes[$parsedUri["path"]];
     }
 
     public static function isValidHttpMethod(string $httpMethod): bool

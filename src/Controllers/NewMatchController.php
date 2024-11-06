@@ -22,7 +22,7 @@ class NewMatchController extends Controller
             $this->runGet();
         }
         if ($httpMethod == "POST") {
-            $this->runPost($request->getPostData());
+            $this->runPost($request);
         }
     }
 
@@ -31,8 +31,10 @@ class NewMatchController extends Controller
         NewMatchPage::render(200);
     }
 
-    public function runPost(array $postData): void
+    public function runPost(Request $request): void
     {
+        $postData = $request->getPostData();
+        $parsedUri = parse_url($request->getUri());
         $playerOneDTO = new PlayerDTO(null, $postData["playerOneName"]);
         $playerTwoDTO = new PlayerDTO(null, $postData["playerTwoName"]);
         $databaseAction = null;
@@ -75,6 +77,6 @@ class NewMatchController extends Controller
             ErrorPage::render($e->getMessage(), 400);
         }
         // Redirect
-        header("Location: http://localhost:8876/match-score?uuid={$newMatchId}");
+        header("Location: {$parsedUri["scheme"]}://{$parsedUri["host"]}:{$parsedUri["port"]}/match-score?uuid={$newMatchId}");
     }
 }
