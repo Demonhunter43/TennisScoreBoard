@@ -54,11 +54,12 @@ class MatchScoreView
                     <thead>
                     <tr>
                         <th>Player Name</th>
-                        <th>SET1</th>
-                        <th>SET2</th>
-                        <th>SET3</th>
-                        <th>SET4</th>
-                        <th>SET5</th>
+                        <?php
+                        for ($i = 1; $i <= $ongoingMatch->getNumberOfSets(); $i++) {
+                            ?>
+                            <th>SET<?= $i ?></th>
+                            <?php
+                        } ?>
                         <th>GAME</th>
                     </tr>
                     </thead>

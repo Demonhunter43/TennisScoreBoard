@@ -37,6 +37,9 @@ class NewMatchPage
                        pattern="[A-Za-z]+"
                        minlength="3"
                        title="Enter a name in the format Name">
+                <label class="label-player" for="numberOfSets">Sets number (3 or 5)</label>
+                <input class="input-player" type="number" id="numberOfSets"
+                       name="numberOfSets">
                 <input class="form-button" type="submit" value="Start">
             </form>
         </section>

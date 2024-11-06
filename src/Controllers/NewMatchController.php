@@ -66,7 +66,7 @@ class NewMatchController extends Controller
         $player2 = new Player($playerTwoDTO->getId(), $playerTwoDTO->getName());
         $redisAction = new RedisAction();
 
-        $newOngoingMatch = new OngoingMatch(null, $player1, $player2);
+        $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $postData["numberOfSets"]);
         try {
             $newMatchId = $redisAction->addMatch($newOngoingMatch);
             $newOngoingMatch->setOngoingId($newMatchId);

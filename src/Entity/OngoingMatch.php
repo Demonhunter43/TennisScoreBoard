@@ -9,15 +9,17 @@ class OngoingMatch implements \JsonSerializable
     private Player $player2;
     private ?Player $winner;
     private int $finishedSetsCounter;
+    private int $numberOfSets;
     private ?array $gamesInSets;
     private Score $points;
 
 
-    public function __construct(?int $ongoingId, Player $player1, Player $player2, Score $points = new Score(0, 0), int $finishedSetsCounter = 0, array $gamesInSets = null, ?Player $winner = null)
+    public function __construct(?int $ongoingId, Player $player1, Player $player2, int $numberOfSets, Score $points = new Score(0, 0), int $finishedSetsCounter = 0, array $gamesInSets = null, ?Player $winner = null)
     {
         $this->ongoingId = $ongoingId;
         $this->player1 = $player1;
         $this->player2 = $player2;
+        $this->numberOfSets = $numberOfSets;
         $this->winner = $winner;
         $this->finishedSetsCounter = $finishedSetsCounter;
         $this->points = $points;
@@ -105,10 +107,16 @@ class OngoingMatch implements \JsonSerializable
         $points = Score::deserialize((array)$matchArray["points"]);
 
         $gamesInSetsData = $matchArray["gamesInSets"];
-        for ($i = 0; $i<5; $i++){
+        for ($i = 0; $i < $matchArray["numberOfSets"]; $i++) {
             $gamesInSets[$i] = Score::deserialize((array)$gamesInSetsData[$i]);
         }
-        return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $points, $matchArray["finishedSetsCounter"], $gamesInSets);
+        return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $matchArray["numberOfSets"]
+            , $points, $matchArray["finishedSetsCounter"], $gamesInSets);
+    }
+
+    public function getNumberOfSets(): int
+    {
+        return $this->numberOfSets;
     }
 
     public function getFinishedSetsCounter(): int
@@ -127,6 +135,7 @@ class OngoingMatch implements \JsonSerializable
             'ongoingId' => $this->ongoingId,
             'player1' => $this->player1,
             'player2' => $this->player2,
+            'numberOfSets' => $this->numberOfSets,
             'finishedSetsCounter' => $this->finishedSetsCounter,
             'gamesInSets' => $this->gamesInSets,
             'points' => $this->points,
