@@ -48,6 +48,19 @@ class MatchScoreView
                 </div>
             </header>
         </section>
+        <?php
+        if (!is_null($ongoingMatch->getWinner())) {
+            ?>
+            <section>
+                <div>
+                    <h2> This match finished. Results added to Database.</h2>
+                    <h2> Winner: <?= $ongoingMatch->getWinner()->getName(); ?></h2>
+                    <h2> Final score board: ?></h2>
+                </div>
+            </section>
+            <?php
+        }
+        ?>
         <section>
             <div>
                 <table>
@@ -73,16 +86,18 @@ class MatchScoreView
                             <td><?= $gameInSet->getFirstPlayerScore(); ?></td>
                         <?php } ?>
                         <td><?= $ongoingMatch->getPoints()->getFirstPlayerScore(); ?></td>
-                        <td>
-                            <form method="post" action="#">
-                                <label class="label-player" for="serveWinner"></label>
-                                <input class="input-player" id="serveWinner"
-                                       hidden="hidden"
-                                       name="serveWinnerID"
-                                       value="<?= $ongoingMatch->getPlayer1()->getId() ?>">
-                                <input class="form-button" type="submit" value="Wins this serve!">
-                            </form>
-                        </td>
+                        <?php if (is_null($ongoingMatch->getWinner())) { ?>
+                            <td>
+                                <form method="post" action="#">
+                                    <label class="label-player" for="serveWinner"></label>
+                                    <input class="input-player" id="serveWinner"
+                                           hidden="hidden"
+                                           name="serveWinnerID"
+                                           value="<?= $ongoingMatch->getPlayer1()->getId() ?>">
+                                    <input class="form-button" type="submit" value="Wins this serve!">
+                                </form>
+                            </td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><?= $ongoingMatch->getPlayer2()->getName() ?></td>
@@ -93,16 +108,18 @@ class MatchScoreView
                             <td><?= $gameInSet->getSecondPlayerScore(); ?></td>
                         <?php } ?>
                         <td><?= $ongoingMatch->getPoints()->getSecondPlayerScore(); ?></td>
-                        <td>
-                            <form method="post" action="#">
-                                <label class="label-player" for="serveWinner"></label>
-                                <input class="input-player" id="serveWinner"
-                                       hidden="hidden"
-                                       name="serveWinnerID"
-                                       value="<?= $ongoingMatch->getPlayer2()->getId() ?>">
-                                <input class="form-button" type="submit" value="Wins this serve!">
-                            </form>
-                        </td>
+                        <?php if (is_null($ongoingMatch->getWinner())) { ?>
+                            <td>
+                                <form method="post" action="#">
+                                    <label class="label-player" for="serveWinner"></label>
+                                    <input class="input-player" id="serveWinner"
+                                           hidden="hidden"
+                                           name="serveWinnerID"
+                                           value="<?= $ongoingMatch->getPlayer2()->getId() ?>">
+                                    <input class="form-button" type="submit" value="Wins this serve!">
+                                </form>
+                            </td>
+                        <?php } ?>
                     </tr>
                     </tbody>
                 </table>

@@ -2,11 +2,11 @@
 
 namespace src\Controllers;
 
+use Exception;
 use src\Database\DatabaseAction;
 use src\DTO\PlayerDTO;
 use src\Entity\OngoingMatch;
 use src\Entity\Player;
-use src\Entity\Score;
 use src\Http\Request;
 use src\Redis\RedisAction;
 use src\View\ErrorPage;
@@ -34,32 +34,31 @@ class NewMatchController extends Controller
     public function runPost(Request $request): void
     {
         $postData = $request->getPostData();
-        $parsedUri = parse_url($request->getUri());
         $playerOneDTO = new PlayerDTO(null, $postData["playerOneName"]);
         $playerTwoDTO = new PlayerDTO(null, $postData["playerTwoName"]);
         $databaseAction = null;
         try {
             $databaseAction = new DatabaseAction();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ErrorPage::render($e->getMessage(), 500);
         }
 
         try {
             $playerOneDTO = $databaseAction->getPlayerByName($playerOneDTO->getName());
-        } catch (\Exception $e) {
+        } catch (Exception) {
             try {
                 $playerOneDTO = $databaseAction->addPlayer($playerOneDTO);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 ErrorPage::render($e->getMessage(), 500);
             }
         }
 
         try {
             $playerTwoDTO = $databaseAction->getPlayerByName($playerTwoDTO->getName());
-        } catch (\Exception $e) {
+        } catch (Exception) {
             try {
                 $playerTwoDTO = $databaseAction->addPlayer($playerTwoDTO);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 ErrorPage::render($e->getMessage(), 500);
             }
         }
@@ -68,15 +67,21 @@ class NewMatchController extends Controller
         $player2 = new Player($playerTwoDTO->getId(), $playerTwoDTO->getName());
         $redisAction = new RedisAction();
 
-        $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $postData["numberOfSets"]);
+        if ($postData["numberOfSets"] != "5") {
+            $numberOfSets = 3;
+        } else {
+            $numberOfSets = 5;
+        }
+
+        $newOngoingMatch = new OngoingMatch(null, $player1, $player2, $numberOfSets);
         try {
             $newMatchId = $redisAction->addMatch($newOngoingMatch);
             $newOngoingMatch->setOngoingId($newMatchId);
             $redisAction->updateMatch($newOngoingMatch);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ErrorPage::render($e->getMessage(), 400);
         }
         // Redirect
-        header("Location: {$parsedUri["scheme"]}://{$parsedUri["host"]}:{$parsedUri["port"]}/match-score?uuid={$newMatchId}");
+        header("Location: http://localhost:8876/match-score?uuid=$newMatchId");
     }
 }

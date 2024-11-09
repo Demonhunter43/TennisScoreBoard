@@ -70,26 +70,16 @@ class DatabaseAction
         return $this->makeObject($data);
     }
 
-    /*public function isPlayerPresentedInDatabase(PlayerDTO $player): bool
-    {
-        $playerName = $player->getName();
-        $sql = "SELECT EXISTS(SELECT 1 FROM players WHERE Name=:playerName);";
-        $stmt = $this->connection->getPdo()->prepare($sql);
-        $stmt->execute([
-            'playerName' => $playerName
-        ]);
-        return (bool)$stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
-    }*/
 
     public function addMatch(MatchDTO $matchDTO): void
     {
         $sql = "INSERT INTO matches
-        (id, player1id, player2id, winnerid) VALUES (null, :player1Id, :player2Id, :winnerId)";
+        (player1id, player2id, winnerid) VALUES (:player1Id, :player2Id, :winnerId)";
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute([
-            'player1Id' => $matchDTO->getPlayer1Name(),
-            'player2Id' => $matchDTO->getPlayer2Name(),
-            'winnerId' => $matchDTO->getWinnerName()
+            'player1Id' => $matchDTO->getPlayer1Id(),
+            'player2Id' => $matchDTO->getPlayer2Id(),
+            'winnerId' => $matchDTO->getWinnerId()
         ]);
     }
 

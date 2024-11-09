@@ -2,12 +2,13 @@
 
 namespace src\App;
 
+use JetBrains\PhpStorm\NoReturn;
 use src\Http\Request;
 use src\Routing\Router;
 
 class App
 {
-    public static function run(): void
+    #[NoReturn] public static function run(): void
     {
         $request = new Request();
         $controller = Router::getController($request);

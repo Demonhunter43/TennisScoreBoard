@@ -37,9 +37,22 @@ class MatchDTO
     {
         return $this->player2->getName();
     }
+    public function getPlayer1Id(): int
+    {
+        return $this->player1->getId();
+    }
+
+    public function getPlayer2Id(): int
+    {
+        return $this->player2->getId();
+    }
 
     public function getWinnerName(): string
     {
         return $this->winner->getName();
+    }
+    public function getWinnerId(): int
+    {
+        return $this->winner->getId();
     }
 }

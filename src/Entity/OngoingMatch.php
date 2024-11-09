@@ -8,13 +8,22 @@ class OngoingMatch implements \JsonSerializable
     private Player $player1;
     private Player $player2;
     private ?Player $winner;
+    private bool $isTieBreak;
     private int $finishedSetsCounter;
     private int $numberOfSets;
     private ?array $gamesInSets;
     private Score $points;
 
 
-    public function __construct(?int $ongoingId, Player $player1, Player $player2, int $numberOfSets, Score $points = new Score(0, 0), int $finishedSetsCounter = 0, array $gamesInSets = null, ?Player $winner = null)
+    public function __construct(?int    $ongoingId,
+                                Player  $player1,
+                                Player  $player2,
+                                int     $numberOfSets,
+                                Score   $points = new Score(0, 0),
+                                int     $finishedSetsCounter = 0,
+                                array   $gamesInSets = null,
+                                ?Player $winner = null,
+                                bool    $isTieBreak = false)
     {
         $this->ongoingId = $ongoingId;
         $this->player1 = $player1;
@@ -23,6 +32,7 @@ class OngoingMatch implements \JsonSerializable
         $this->winner = $winner;
         $this->finishedSetsCounter = $finishedSetsCounter;
         $this->points = $points;
+        $this->isTieBreak = $isTieBreak;
         if (is_null($gamesInSets)) {
             for ($i = 0; $i < 5; $i++) {
                 $this->gamesInSets[$i] = new Score(0, 0);
@@ -30,6 +40,16 @@ class OngoingMatch implements \JsonSerializable
         } else {
             $this->gamesInSets = $gamesInSets;
         }
+    }
+
+    public function isTieBreak(): bool
+    {
+        return $this->isTieBreak;
+    }
+
+    public function setIsTieBreak(bool $isTieBreak): void
+    {
+        $this->isTieBreak = $isTieBreak;
     }
 
 
@@ -55,25 +75,6 @@ class OngoingMatch implements \JsonSerializable
         $this->winner = $winner;
     }
 
-    public function getSets(): Score
-    {
-        return $this->sets;
-    }
-
-    public function setSets(Score $sets): void
-    {
-        $this->sets = $sets;
-    }
-
-    public function getGames(): Score
-    {
-        return $this->games;
-    }
-
-    public function setGames(Score $games): void
-    {
-        $this->games = $games;
-    }
 
     public function getPoints(): Score
     {
@@ -102,16 +103,18 @@ class OngoingMatch implements \JsonSerializable
 
         $player1 = Player::deserialize((array)$matchArray["player1"]);
         $player2 = Player::deserialize((array)$matchArray["player2"]);
+        $winner = null;
 
 
         $points = Score::deserialize((array)$matchArray["points"]);
 
         $gamesInSetsData = $matchArray["gamesInSets"];
+        $gamesInSets = null;
         for ($i = 0; $i < $matchArray["numberOfSets"]; $i++) {
             $gamesInSets[$i] = Score::deserialize((array)$gamesInSetsData[$i]);
         }
         return new OngoingMatch($matchArray["ongoingId"], $player1, $player2, $matchArray["numberOfSets"]
-            , $points, $matchArray["finishedSetsCounter"], $gamesInSets);
+            , $points, $matchArray["finishedSetsCounter"], $gamesInSets,  $winner, $matchArray["isTieBreak"]);
     }
 
     public function getNumberOfSets(): int
@@ -129,6 +132,7 @@ class OngoingMatch implements \JsonSerializable
         return $this->gamesInSets;
     }
 
+
     public function jsonSerialize(): array
     {
         return [
@@ -139,7 +143,27 @@ class OngoingMatch implements \JsonSerializable
             'finishedSetsCounter' => $this->finishedSetsCounter,
             'gamesInSets' => $this->gamesInSets,
             'points' => $this->points,
-            'winner' => $this->winner
+            'winner' => $this->winner,
+            'isTieBreak' => $this->isTieBreak
         ];
+    }
+
+    public function setGamesInCurrentSet(Score $gamesInCurrentSet): void
+    {
+        $this->gamesInSets[$this->finishedSetsCounter] = $gamesInCurrentSet;
+    }
+
+    public function setFinishedSetsCounter(int $finishedSetsCounter): void
+    {
+        $this->finishedSetsCounter = $finishedSetsCounter;
+    }
+
+    public function getPlayerByInMatchId(int $playerInMatchId): Player
+    {
+        if ($playerInMatchId == 1) {
+            return $this->player1;
+        } else {
+            return $this->player2;
+        }
     }
 }
