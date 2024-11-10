@@ -55,7 +55,7 @@ class MatchScoreView
                 <div>
                     <h2> This match finished. Results added to Database.</h2>
                     <h2> Winner: <?= $ongoingMatch->getWinner()->getName(); ?></h2>
-                    <h2> Final score board: ?></h2>
+                    <h2> Final score board:</h2>
                 </div>
             </section>
             <?php
@@ -72,8 +72,13 @@ class MatchScoreView
                             ?>
                             <th>SET<?= $i ?></th>
                             <?php
-                        } ?>
-                        <th>GAME</th>
+                        }
+                        if (is_null($ongoingMatch->getWinner())) {
+                            ?>
+                            <th>GAME</th>
+                        <?php } else { ?>
+                            <th>GAMES</th>
+                        <?php } ?>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,9 +89,10 @@ class MatchScoreView
                         foreach ($gamesInSets as $gameInSet) {
                             ?>
                             <td><?= $gameInSet->getFirstPlayerScore(); ?></td>
-                        <?php } ?>
-                        <td><?= $ongoingMatch->getPoints()->getFirstPlayerScore(); ?></td>
-                        <?php if (is_null($ongoingMatch->getWinner())) { ?>
+                        <?php }
+                        if (is_null($ongoingMatch->getWinner())) {
+                            ?>
+                            <td><?= $ongoingMatch->getPoints()->getFirstPlayerScore(); ?></td>
                             <td>
                                 <form method="post" action="#">
                                     <label class="label-player" for="serveWinner"></label>
@@ -97,6 +103,15 @@ class MatchScoreView
                                     <input class="form-button" type="submit" value="Wins this serve!">
                                 </form>
                             </td>
+                        <?php } else {
+                            $sumGamesPlayer1 = 0;
+                            $sumGamesPlayer2 = 0;
+                            for ($i = 0; $i < $ongoingMatch->getNumberOfSets(); $i++) {
+                                $sumGamesPlayer1 = $sumGamesPlayer1 + $gamesInSets[$i]->getFirstPlayerScore();
+                                $sumGamesPlayer2 = $sumGamesPlayer2 + $gamesInSets[$i]->getSecondPlayerScore();
+                            }
+                            ?>
+                            <td><?= $sumGamesPlayer1; ?></td>
                         <?php } ?>
                     </tr>
                     <tr>
@@ -106,9 +121,10 @@ class MatchScoreView
                         foreach ($gamesInSets as $gameInSet) {
                             ?>
                             <td><?= $gameInSet->getSecondPlayerScore(); ?></td>
-                        <?php } ?>
-                        <td><?= $ongoingMatch->getPoints()->getSecondPlayerScore(); ?></td>
-                        <?php if (is_null($ongoingMatch->getWinner())) { ?>
+                        <?php }
+                        if (is_null($ongoingMatch->getWinner())) {
+                            ?>
+                            <td><?= $ongoingMatch->getPoints()->getSecondPlayerScore(); ?></td>
                             <td>
                                 <form method="post" action="#">
                                     <label class="label-player" for="serveWinner"></label>
@@ -119,6 +135,9 @@ class MatchScoreView
                                     <input class="form-button" type="submit" value="Wins this serve!">
                                 </form>
                             </td>
+                            <?php
+                        } else { ?>
+                            <td><?= $sumGamesPlayer2; ?></td>
                         <?php } ?>
                     </tr>
                     </tbody>
