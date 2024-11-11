@@ -23,9 +23,14 @@ class PlayedMatchesController extends Controller
     public function run(Request $request): void
     {
         $query = parse_url($request->getUri(), PHP_URL_QUERY);
+
         if (!empty($query)) {
             parse_str($query, $queryArray);
-            $this->showMatchesByPlayerName($queryArray["filter_by_player_name"]);
+            if (array_key_exists("filter_by_player_name", $queryArray)) {
+                $this->showMatchesByPlayerName($queryArray["filter_by_player_name"]);
+            } else {
+                ErrorPage::render("Wrong query", 500);
+            }
         } else {
             $this->showAllMatches();
         }
