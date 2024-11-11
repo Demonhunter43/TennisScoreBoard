@@ -63,7 +63,8 @@ readonly class RedisAction
         $this->redis->set($id, $serializedMatch);
     }
 
-    public function deleteMatchById(?int $getOngoingId)
+    public function deleteMatch(OngoingMatch $match): void
     {
+        $this->redis->del($match->getOngoingId());
     }
 }

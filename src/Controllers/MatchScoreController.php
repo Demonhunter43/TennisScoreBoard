@@ -61,7 +61,7 @@ class MatchScoreController extends Controller
             if (is_null($ongoingMatch->getWinner())) {
                 $this->redisAction->updateMatch($ongoingMatch);
             } else {
-                $this->redisAction->deleteMatchById($ongoingMatch->getOngoingId());
+                $this->redisAction->deleteMatch($ongoingMatch);
                 FinishedMatchesPersistenceService::saveFinishedMatch($ongoingMatch);
             }
         } catch (Exception $e) {
