@@ -45,17 +45,15 @@ class FinishedMatchesView
                     <tbody>
 
                     <?php
-                    $matchIndex = 0;
                     foreach ($data as $matchDto) {
-                        $matchIndex++; ?>
+                        ?>
                         <tr>
-                            <th><?= $matchIndex ?></th>
+                            <th><?= $matchDto->getId() ?></th>
                             <th><?= $matchDto->getPlayer1Name() ?></th>
                             <th><?= $matchDto->getPlayer2Name() ?></th>
                             <th><?= $matchDto->getWinnerName() ?></th>
                         </tr>
                     <?php } ?>
-
                     </tbody>
                 </table>
             </div>

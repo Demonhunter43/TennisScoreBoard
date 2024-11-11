@@ -64,7 +64,7 @@ class DatabaseAction
 
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        if (array_key_exists(0, $data)) {
+        if (!array_key_exists(0, $data)) {
             throw new \Exception("No this player in database");
         }
         return $this->makeObject($data[0]);
