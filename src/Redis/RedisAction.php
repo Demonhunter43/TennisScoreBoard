@@ -56,6 +56,9 @@ readonly class RedisAction
     }
 
 
+    /**
+     * @throws \RedisException
+     */
     public function updateMatch(OngoingMatch $match): void
     {
         $id = $match->getOngoingId();
@@ -63,6 +66,9 @@ readonly class RedisAction
         $this->redis->set($id, $serializedMatch);
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function deleteMatch(OngoingMatch $match): void
     {
         $this->redis->del($match->getOngoingId());
