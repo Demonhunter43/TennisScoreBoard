@@ -5,6 +5,7 @@ namespace src\Database;
 
 use src\DTO\MatchDTO;
 use src\DTO\PlayerDTO;
+use src\Exceptions\DataNotFountInDatabaseException;
 
 class DatabaseAction
 {
@@ -17,6 +18,7 @@ class DatabaseAction
 
     /**
      * @return MatchDTO[]
+     * @throws DataNotFountInDatabaseException
      */
     public function getAllMatches(): array
     {
@@ -34,7 +36,13 @@ class DatabaseAction
 
         $stmt = $this->connection->getPdo()->prepare($sql);
         $stmt->execute();
-        return $this->makeObjectsArray(($stmt->fetchAll(\PDO::FETCH_ASSOC)));
+
+        $array = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (empty($array)) {
+            throw new DataNotFountInDatabaseException();
+        }
+        return $this->makeObjectsArray($array);
     }
 
     /**
@@ -62,12 +70,12 @@ class DatabaseAction
             'playerName' => $name
         ]);
 
-        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $array = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        if (!array_key_exists(0, $data)) {
+        if (empty($array)) {
             throw new \Exception("No this player in database");
         }
-        return $this->makeObject($data[0]);
+        return $this->makeObject($array[0]);
     }
 
 
@@ -107,5 +115,36 @@ class DatabaseAction
             }
             return new MatchDTO($dataObject["id"], $player1DTO, $player2DTO, $winnerDTO);
         }
+    }
+
+    /**
+     * @throws DataNotFountInDatabaseException
+     */
+    public function getMatchesByPlayerName(string $playerName): array
+    {
+        $sql = "SELECT  matches.id,
+                        Player1.name AS Player1_Name,
+                        Player2.name AS Player2_Name,
+                        Winner.name AS Winner_Name
+                FROM matches
+                JOIN players AS player1
+                ON player1.id = matches.player1id
+                JOIN players AS player2
+                ON player2.id = matches.player2id
+                JOIN players AS winner
+                ON winner.id = matches.winnerid
+                WHERE player1.name = :playerName OR player2.name = :playerName;";
+
+        $stmt = $this->connection->getPdo()->prepare($sql);
+        $stmt->execute([
+            "playerName" => $playerName
+        ]);
+
+        $array = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (empty($array)) {
+            throw new DataNotFountInDatabaseException();
+        }
+        return $this->makeObjectsArray($array);
     }
 }

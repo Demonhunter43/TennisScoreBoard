@@ -33,14 +33,15 @@ class FinishedMatchesView
         </section>
         <section>
             <div>
-                <form method="get" action="">
+                <form method="get" action="?filter_by_player_name=${NAME}">
                     <label for="playerName"></label>
                     <input class="input-player" placeholder="Name" type="text" id="playerName"
-                           name="playerOneName"
+                           name="filter_by_player_name"
                            required
                            pattern="[A-Za-z]+"
                            minlength="3"
                            title="Enter a name in the format Name">
+                    <input class="form-button" type="submit" value="Sort by name">
                 </form>
             </div>
         </section>
