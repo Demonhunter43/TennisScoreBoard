@@ -4,5 +4,5 @@ namespace src\Exceptions;
 
 class WrongIndexRedisException extends \Exception
 {
-    protected $message = "No cashed ongoing match in redis by this index ";
+    protected $message = "This match hasn't started";
 }

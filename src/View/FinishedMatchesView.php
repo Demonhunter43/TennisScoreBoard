@@ -33,6 +33,19 @@ class FinishedMatchesView
         </section>
         <section>
             <div>
+                <form method="get" action="">
+                    <label for="playerName"></label>
+                    <input class="input-player" placeholder="Name" type="text" id="playerName"
+                           name="playerOneName"
+                           required
+                           pattern="[A-Za-z]+"
+                           minlength="3"
+                           title="Enter a name in the format Name">
+                </form>
+            </div>
+        </section>
+        <section>
+            <div>
                 <table>
                     <thead>
                     <tr>

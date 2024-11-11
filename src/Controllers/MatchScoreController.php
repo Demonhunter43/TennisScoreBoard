@@ -57,12 +57,17 @@ class MatchScoreController extends Controller
             ErrorPage::render($e->getMessage(), 400);
         }
         $ongoingMatch = MatchScoreCalculationService::calculate($ongoingMatch, $serveWinnerID);
-        if (is_null($ongoingMatch->getWinner())) {
-            $this->redisAction->updateMatch($ongoingMatch);
-        } else {
-            $this->redisAction->deleteMatchById($ongoingMatch->getOngoingId());
-            FinishedMatchesPersistenceService::saveFinishedMatch($ongoingMatch);
+        try {
+            if (is_null($ongoingMatch->getWinner())) {
+                $this->redisAction->updateMatch($ongoingMatch);
+            } else {
+                $this->redisAction->deleteMatchById($ongoingMatch->getOngoingId());
+                FinishedMatchesPersistenceService::saveFinishedMatch($ongoingMatch);
+            }
+        } catch (Exception $e) {
+            ErrorPage::render($e->getMessage(), 400);
         }
+
         MatchScoreView::render($ongoingMatch, 200);
     }
 
