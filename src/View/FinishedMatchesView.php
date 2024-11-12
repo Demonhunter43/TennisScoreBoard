@@ -22,6 +22,7 @@ class FinishedMatchesView
         <head>
             <meta charset="UTF-8">
             <title>Played matches</title>
+            <link rel="stylesheet" href="style.css">
         </head>
         <body>
         <section>
@@ -62,10 +63,10 @@ class FinishedMatchesView
                     foreach ($data as $matchDto) {
                         ?>
                         <tr>
-                            <th><?= $matchDto->getId() ?></th>
-                            <th><?= $matchDto->getPlayer1Name() ?></th>
-                            <th><?= $matchDto->getPlayer2Name() ?></th>
-                            <th><?= $matchDto->getWinnerName() ?></th>
+                            <td><?= $matchDto->getId() ?></td>
+                            <td><?= $matchDto->getPlayer1Name() ?></td>
+                            <td><?= $matchDto->getPlayer2Name() ?></td>
+                            <td><?= $matchDto->getWinnerName() ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
