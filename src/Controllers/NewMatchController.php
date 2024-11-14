@@ -8,6 +8,7 @@ use src\DTO\PlayerDTO;
 use src\Entity\OngoingMatch;
 use src\Entity\Player;
 use src\Http\Request;
+use src\Redirect\Redirector;
 use src\Redis\RedisAction;
 use src\View\ErrorPage;
 use src\View\NewMatchPage;
@@ -81,7 +82,6 @@ class NewMatchController extends Controller
         } catch (Exception $e) {
             ErrorPage::render($e->getMessage(), 400);
         }
-        // Redirect
-        header("Location: http://localhost:8876/match-score?uuid=$newMatchId");
+        Redirector::redirectByLink("http://localhost:8876/match-score?uuid=$newMatchId");
     }
 }

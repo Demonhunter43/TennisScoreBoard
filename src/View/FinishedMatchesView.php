@@ -7,13 +7,15 @@ use src\DTO\MatchDTO;
 
 class FinishedMatchesView
 {
+
     /**
-     * @param MatchDTO[] $data
-     //* @param int $currentPage
+     * @param array $data
+     * @param int $currentPage
+     * @param int $maxPage
      * @param int $code
      * @return void
      */
-    #[NoReturn] public static function render(array $data,  int $currentPage, int $code): void
+    #[NoReturn] public static function render(array $data, int $currentPage, int $maxPage, int $code): void
     {
         http_response_code($code);
         ?>
@@ -47,10 +49,12 @@ class FinishedMatchesView
             .h1 {
                 text-align: center;
             }
-            .sortingTableTd{
+
+            .sortingTableTd {
                 background: white;
             }
-            .sortingTable, .matchesTable{
+
+            .sortingTable, .matchesTable {
                 margin-left: auto;
                 margin-right: auto;
             }
