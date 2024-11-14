@@ -9,8 +9,9 @@ class Redirector
         header("Location: $link");
     }
 
-    public static function redirectByPageName(string $pageName)
+    public static function redirectByPageName(string $pageName): void
     {
-        header($link);
+        $links = require_once "links.php";
+        header($links["pageNumber"]);
     }
 }
