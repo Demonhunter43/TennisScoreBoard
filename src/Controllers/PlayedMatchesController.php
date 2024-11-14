@@ -5,11 +5,12 @@ namespace src\Controllers;
 use JetBrains\PhpStorm\NoReturn;
 use src\Database\DatabaseAction;
 use src\Http\Request;
+use src\Redirect\Redirector;
 use src\View\ErrorPage;
 use src\View\FinishedMatchesView;
 
 define("DEFAULT_PAGE", 1);
-define("NUMBER_OF_MATCHES_ON_PAGE", 4);
+define("NUMBER_OF_MATCHES_ON_PAGE", 5);
 
 class PlayedMatchesController extends Controller
 {
@@ -45,29 +46,48 @@ class PlayedMatchesController extends Controller
         }
     }
 
-    public function showMatchesByPlayerName(string $playerName): void
+    private function showMatchesByPlayerName(string $playerName): void
     {
         try {
             $arrayOfMatches = $this->databaseAction->getMatchesByPlayerName($playerName);
         } catch (\Exception $e) {
             ErrorPage::render($e->getMessage(), 500);
         }
-        $maxPage = count($arrayOfMatches);
+        $maxPage = (int)ceil(count($arrayOfMatches) / NUMBER_OF_MATCHES_ON_PAGE);
         if ($this->currentPage > $maxPage) {
-
+            Redirector::redirectByPageName("matches");
         }
+        $arrayOfMatches = $this->cutArrayAccordingCurrentPage($arrayOfMatches);
         FinishedMatchesView::render($arrayOfMatches, $this->currentPage, $maxPage, 200);
     }
 
-    #[NoReturn] public function showAllMatches(): void
+    #[NoReturn] private function showAllMatches(): void
     {
         try {
             $arrayOfMatches = $this->databaseAction->getAllMatches();
         } catch (\Exception $e) {
             ErrorPage::render($e->getMessage(), 500);
         }
-        $maxPage = count($arrayOfMatches);
-        //TODO sort $arrayOfMatches according page number
+        $maxPage = (int)ceil(count($arrayOfMatches) / NUMBER_OF_MATCHES_ON_PAGE);
+        if ($this->currentPage > $maxPage) {
+            Redirector::redirectByPageName("matches");
+        }
+        $arrayOfMatches = $this->cutArrayAccordingCurrentPage($arrayOfMatches);
         FinishedMatchesView::render($arrayOfMatches, $this->currentPage, $maxPage, 200);
+    }
+
+    private function cutArrayAccordingCurrentPage(array $arrayOfMatches): array
+    {
+        $leftIndex = ($this->currentPage - 1) * NUMBER_OF_MATCHES_ON_PAGE;
+        $rightIndex = $this->currentPage * NUMBER_OF_MATCHES_ON_PAGE;
+        $dataArray = null;
+        for ($i = $leftIndex; $i < $rightIndex; $i++) {
+            if (array_key_exists($i, $arrayOfMatches)) {
+                $dataArray[$i] = $arrayOfMatches[$i];
+            } else {
+                $dataArray[$i] = null;
+            }
+        }
+        return $dataArray;
     }
 }

@@ -108,6 +108,7 @@ class FinishedMatchesView
 
                     <?php
                     foreach ($data as $matchDto) {
+                        if (is_null($matchDto)) return;
                         ?>
                         <tr>
                             <td class="matchTd"><?= $matchDto->getId() ?></td>
