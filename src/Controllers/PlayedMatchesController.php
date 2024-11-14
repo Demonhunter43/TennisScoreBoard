@@ -2,10 +2,13 @@
 
 namespace src\Controllers;
 
+use JetBrains\PhpStorm\NoReturn;
 use src\Database\DatabaseAction;
 use src\Http\Request;
 use src\View\ErrorPage;
 use src\View\FinishedMatchesView;
+
+define("DEFAULT_PAGE", 1);
 
 class PlayedMatchesController extends Controller
 {
@@ -24,35 +27,40 @@ class PlayedMatchesController extends Controller
     {
         $query = parse_url($request->getUri(), PHP_URL_QUERY);
 
+        $page = DEFAULT_PAGE;
         if (!empty($query)) {
             parse_str($query, $queryArray);
-            if (array_key_exists("filter_by_player_name", $queryArray)) {
-                $this->showMatchesByPlayerName($queryArray["filter_by_player_name"]);
-            } else {
-                ErrorPage::render("Wrong query", 500);
+            if (array_key_exists("page", $queryArray)) {
+                $page = $queryArray["page"];
             }
         } else {
-            $this->showAllMatches();
+            $this->showAllMatches($page);
         }
+        if (array_key_exists("filter_by_player_name", $queryArray)) {
+            $this->showMatchesByPlayerName($queryArray["filter_by_player_name"], $page);
+        } else {
+            ErrorPage::render("Wrong query", 500);
+        }
+
     }
 
-    public function showMatchesByPlayerName(string $playerName): void
+    public function showMatchesByPlayerName(string $playerName, int $page): void
     {
         try {
             $arrayOfMatches = $this->databaseAction->getMatchesByPlayerName($playerName);
         } catch (\Exception $e) {
             ErrorPage::render($e->getMessage(), 500);
         }
-        FinishedMatchesView::render($arrayOfMatches, 200);
+        FinishedMatchesView::render($arrayOfMatches, $page, 200);
     }
 
-    public function showAllMatches(): void
+    #[NoReturn] public function showAllMatches(int $page): void
     {
         try {
             $arrayOfMatches = $this->databaseAction->getAllMatches();
         } catch (\Exception $e) {
             ErrorPage::render($e->getMessage(), 500);
         }
-        FinishedMatchesView::render($arrayOfMatches, 200);
+        FinishedMatchesView::render($arrayOfMatches, $page, 200);
     }
 }

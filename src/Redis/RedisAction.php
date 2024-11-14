@@ -42,7 +42,7 @@ readonly class RedisAction
         $lastIndex = $this->redis->get("lastIndex");
 
         if ($lastIndex === false) {
-            $lastIndex = 0;
+            $lastIndex = 1;
         } else {
             $lastIndex = (int)$lastIndex;
             $lastIndex++;
