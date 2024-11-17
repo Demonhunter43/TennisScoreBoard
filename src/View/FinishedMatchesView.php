@@ -8,14 +8,20 @@ use src\DTO\MatchDTO;
 class FinishedMatchesView
 {
 
+
     /**
      * @param array $data
      * @param int $currentPage
      * @param int $maxPage
      * @param int $code
+     * @param string|null $filteredPlayerName
      * @return void
      */
-    #[NoReturn] public static function render(array $data, int $currentPage, int $maxPage, int $code): void
+    #[NoReturn] public static function render(array   $data,
+                                              int     $currentPage,
+                                              int     $maxPage,
+                                              int     $code,
+                                              ?string $filteredPlayerName = null): void
     {
         http_response_code($code);
         ?>
@@ -59,6 +65,15 @@ class FinishedMatchesView
                 margin-right: auto;
             }
 
+            .pageSwitch {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .startNewMatchButton {
+                text-align: center;
+            }
+
         </style>
         <body>
         <section>
@@ -73,7 +88,7 @@ class FinishedMatchesView
                 <table class="sortingTable">
                     <tr class>
                         <td class="sortingTableTd">
-                            <form method="get" action="?filter_by_player_name=${NAME}">
+                            <form method="get" action="">
                                 <label for="playerName"></label>
                                 <input class="input-player" placeholder="Name" type="text" id="playerName"
                                        name="filter_by_player_name"
@@ -108,7 +123,7 @@ class FinishedMatchesView
 
                     <?php
                     foreach ($data as $matchDto) {
-                        if (is_null($matchDto)) return;
+                        if (is_null($matchDto)) continue;
                         ?>
                         <tr>
                             <td class="matchTd"><?= $matchDto->getId() ?></td>
@@ -119,6 +134,73 @@ class FinishedMatchesView
                     <?php } ?>
                     </tbody>
                 </table>
+            </div>
+        </section>
+        <section>
+            <table class="pageSwitch">
+                <tr>
+                    <?php
+                    if ($currentPage > 1) { ?>
+                        <td>
+                            <form action="">
+                                <?php if (!is_null($filteredPlayerName)) { ?>
+                                    <input type="hidden"
+                                           name="filter_by_player_name"
+                                           value="<?= $filteredPlayerName ?>">
+                                <?php } ?>
+                                <input type="hidden"
+                                       name="page"
+                                       value="<?= $currentPage - 1 ?>">
+                                <input type="submit" value="<"/>
+                            </form>
+                        </td>
+                    <?php }
+                    for ($i = 1; $i <= $maxPage; $i++) {
+                        if ($i == $currentPage) { ?>
+                            <td>
+                                <b><?= $i ?></b>
+                            </td>
+                        <?php } else { ?>
+                            <td>
+                                <form action="">
+                                    <?php if (!is_null($filteredPlayerName)) { ?>
+                                        <input type="hidden"
+                                               name="filter_by_player_name"
+                                               value="<?= $filteredPlayerName ?>">
+                                    <?php } ?>
+                                    <input type="hidden"
+                                           name="page"
+                                           value="<?= $i ?>">
+                                    <input type="submit" value="<?= $i ?>"/>
+                                </form>
+                            </td>
+                            <?php
+                        }
+                    }
+                    if ($currentPage < $maxPage) {
+                        ?>
+                        <td>
+                            <form action="">
+                                <?php if (!is_null($filteredPlayerName)) { ?>
+                                    <input type="hidden"
+                                           name="filter_by_player_name"
+                                           value="<?= $filteredPlayerName ?>">
+                                <?php } ?>
+                                <input type="hidden"
+                                       name="page"
+                                       value="<?= $currentPage + 1 ?>">
+                                <input type="submit" value=">"/>
+                            </form>
+                        </td>
+                        <?php
+                    }
+                    ?>
+                </tr>
+            </table>
+            <div class="startNewMatchButton">
+                <form action="http://localhost:8876/new-match">
+                    <input type="submit" value="Start new match"/>
+                </form>
             </div>
         </section>
         </body>

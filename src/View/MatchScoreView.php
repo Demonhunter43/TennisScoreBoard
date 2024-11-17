@@ -37,7 +37,19 @@ class MatchScoreView
             }
 
             h1 {
-                padding-left: 250px;
+                text-align: center;
+            }
+            h2 {
+                text-align: center;
+            }
+
+            .goToFinishedMatches {
+                text-align: center;
+            }
+
+            .scoreTable {
+                margin-left: auto;
+                margin-right: auto;
             }
         </style>
         <body>
@@ -63,7 +75,7 @@ class MatchScoreView
         ?>
         <section>
             <div>
-                <table>
+                <table class="scoreTable">
                     <thead>
                     <tr>
                         <th>Player Name</th>
@@ -144,8 +156,12 @@ class MatchScoreView
                 </table>
             </div>
         </section>
+        <div class="goToFinishedMatches">
+            <form action="http://localhost:8876/matches">
+                <input type="submit" value="go to finished matches"/>
+            </form>
+        </div>
         </body>
         </html>
-
     <?php }
 }

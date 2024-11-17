@@ -16,6 +16,14 @@ class ErrorPage
             <meta charset="UTF-8">
             <title>Something went wrong</title>
         </head>
+        <style>
+            .goToFinishedMatches{
+                text-align: center;
+            }
+            h2{
+                text-align: center;
+            }
+        </style>
         <body>
         <section>
             <header>
@@ -24,6 +32,11 @@ class ErrorPage
                 </div>
             </header>
         </section>
+        <div class="goToFinishedMatches">
+            <form action="http://localhost:8876/matches">
+                <input type="submit" value="go to finished matches"/>
+            </form>
+        </div>
         </body>
         </html>
         <?php

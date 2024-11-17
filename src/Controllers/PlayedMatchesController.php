@@ -5,7 +5,7 @@ namespace src\Controllers;
 use JetBrains\PhpStorm\NoReturn;
 use src\Database\DatabaseAction;
 use src\Http\Request;
-use src\Redirect\Redirector;
+use src\Redirect\Redirect;
 use src\View\ErrorPage;
 use src\View\FinishedMatchesView;
 
@@ -26,27 +26,23 @@ class PlayedMatchesController extends Controller
         }
     }
 
-    public function run(Request $request): void
+    #[NoReturn] public function run(Request $request): void
     {
         $query = parse_url($request->getUri(), PHP_URL_QUERY);
-
         $this->currentPage = DEFAULT_PAGE;
         if (!empty($query)) {
             parse_str($query, $queryArray);
             if (array_key_exists("page", $queryArray)) {
                 $this->currentPage = $queryArray["page"];
             }
-        } else {
-            $this->showAllMatches();
+            if (array_key_exists("filter_by_player_name", $queryArray)) {
+                $this->showMatchesByPlayerName($queryArray["filter_by_player_name"]);
+            }
         }
-        if (array_key_exists("filter_by_player_name", $queryArray)) {
-            $this->showMatchesByPlayerName($queryArray["filter_by_player_name"]);
-        } else {
-            ErrorPage::render("Wrong query", 500);
-        }
+        $this->showAllMatches();
     }
 
-    private function showMatchesByPlayerName(string $playerName): void
+    #[NoReturn] private function showMatchesByPlayerName(string $playerName): void
     {
         try {
             $arrayOfMatches = $this->databaseAction->getMatchesByPlayerName($playerName);
@@ -55,10 +51,10 @@ class PlayedMatchesController extends Controller
         }
         $maxPage = (int)ceil(count($arrayOfMatches) / NUMBER_OF_MATCHES_ON_PAGE);
         if ($this->currentPage > $maxPage) {
-            Redirector::redirectByPageName("matches");
+            Redirect::redirectByPageName("matches");
         }
         $arrayOfMatches = $this->cutArrayAccordingCurrentPage($arrayOfMatches);
-        FinishedMatchesView::render($arrayOfMatches, $this->currentPage, $maxPage, 200);
+        FinishedMatchesView::render($arrayOfMatches, $this->currentPage, $maxPage, 200, $playerName);
     }
 
     #[NoReturn] private function showAllMatches(): void
@@ -70,7 +66,7 @@ class PlayedMatchesController extends Controller
         }
         $maxPage = (int)ceil(count($arrayOfMatches) / NUMBER_OF_MATCHES_ON_PAGE);
         if ($this->currentPage > $maxPage) {
-            Redirector::redirectByPageName("matches");
+            Redirect::redirectByPageName("matches");
         }
         $arrayOfMatches = $this->cutArrayAccordingCurrentPage($arrayOfMatches);
         FinishedMatchesView::render($arrayOfMatches, $this->currentPage, $maxPage, 200);

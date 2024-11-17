@@ -2,7 +2,7 @@
 
 namespace src\Redirect;
 
-class Redirector
+class Redirect
 {
     public static function redirectByLink(string $link): void
     {
@@ -12,6 +12,6 @@ class Redirector
     public static function redirectByPageName(string $pageName): void
     {
         $links = require_once "links.php";
-        header($links["pageNumber"]);
+        header($links[$pageName]);
     }
 }
