@@ -13,6 +13,15 @@ class NewMatchPage
         <head>
             <title>New match</title>
         </head>
+        <style>
+            .formSection {
+                text-align: center;
+            }
+
+            h1 {
+                text-align: center;
+            }
+        </style>
         <body>
         <section>
             <header>
@@ -21,7 +30,7 @@ class NewMatchPage
                 </div>
             </header>
         </section>
-        <section>
+        <section class="formSection">
             <form method="post" action="#">
                 <label class="label-player" for="playerOneName">Player one</label>
                 <input class="input-player" placeholder="Name" type="text" id="playerOneName"
